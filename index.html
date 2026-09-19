@@ -1,0 +1,3174 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="शाळा कॅश बुक" />
+  <link rel="manifest" href='data:application/manifest+json,{"name":"शाळा सादील व कॅश बुक प्रणाली","short_name":"कॅश बुक","start_url":".","display":"standalone","background_color":"#f8fafc","theme_color":"#1e3a8a","orientation":"portrait-primary"}' />
+  <title>शाळा बहु-खाते सादील खर्च व कॅश बुक व्यवस्थापन प्रणाली</title>
+
+  <!-- Google Fonts: Kalam (Handwriting) & Yantramanav / Noto Sans Devanagari -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Yantramanav:wght@400;500;700&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1e40af;
+      --secondary: #0f766e;
+      --accent: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --jama-bg: #ecfdf5;
+      --jama-text: #065f46;
+      --jama-border: #a7f3d0;
+      --kharch-bg: #fff1f2;
+      --kharch-text: #9f1239;
+      --kharch-border: #fecdd3;
+      --hw-font: 'Kalam', cursive, 'Noto Sans Devanagari', sans-serif;
+      --ink-blue: #0f2e59;
+      --ink-red: #991b1b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Yantramanav', 'Noto Sans Devanagari', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Bar */
+    .navbar {
+      background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+      color: #ffffff;
+      padding: 12px 16px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .brand-icon {
+      font-size: 1.8rem;
+      background: rgba(255,255,255,0.18);
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 0.8rem;
+      color: #bfdbfe;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.14);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.22);
+    }
+
+    .ctrl-group label {
+      font-size: 0.8rem;
+      color: #e2e8f0;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    select, input, textarea {
+      font-family: inherit;
+      padding: 6px 8px;
+      border-radius: 5px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.92rem;
+      color: #1e293b;
+      background: #ffffff;
+      outline: none;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      touch-action: manipulation;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-sm {
+      padding: 5px 8px;
+      font-size: 0.8rem;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+    .btn-primary:hover { background-color: var(--primary-hover); }
+
+    .btn-success {
+      background-color: #059669;
+      color: #ffffff;
+    }
+    .btn-success:hover { background-color: #047857; }
+
+    .btn-danger {
+      background-color: #dc2626;
+      color: #ffffff;
+    }
+    .btn-danger:hover { background-color: #b91c1c; }
+
+    .btn-warning {
+      background-color: #d97706;
+      color: #ffffff;
+    }
+    .btn-warning:hover { background-color: #b45309; }
+
+    .btn-secondary {
+      background-color: #475569;
+      color: #ffffff;
+    }
+    .btn-secondary:hover { background-color: #334155; }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.4);
+      color: #ffffff;
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .btn-print-action {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+    }
+    .btn-print-action:hover {
+      background: #0369a1;
+    }
+
+    /* Sub Navigation Tabs (Mobile Smooth Scroll) */
+    .tabs-bar {
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+      position: sticky;
+      top: 58px;
+      z-index: 95;
+    }
+
+    .tabs-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 2px;
+      padding: 0 12px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      padding: 12px 14px;
+      border: none;
+      background: transparent;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary);
+      background: #f1f5f9;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    /* Main Container */
+    .main-content {
+      max-width: 1400px;
+      margin: 16px auto;
+      padding: 0 12px 60px;
+      width: 100%;
+      flex: 1;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Cards */
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid #e2e8f0;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Month Selector Strip (Horizontal swipe friendly on mobile) */
+    .months-strip {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      background: #f1f5f9;
+      padding: 6px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .months-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .month-pill {
+      flex: 0 0 auto;
+      min-width: 76px;
+      text-align: center;
+      padding: 8px 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .month-pill:hover {
+      background: #e2e8f0;
+      color: var(--primary);
+    }
+
+    .month-pill.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 4px rgba(30, 58, 138, 0.3);
+    }
+
+    /* Month Summary Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      font-family: var(--hw-font);
+      color: var(--text);
+    }
+
+    .stat-card.opening { border-left: 5px solid #0284c7; background: #f0f9ff; }
+    .stat-card.jama { border-left: 5px solid #059669; background: #ecfdf5; }
+    .stat-card.kharch { border-left: 5px solid #dc2626; background: #fff1f2; }
+    .stat-card.closing { border-left: 5px solid #7c3aed; background: #faf5ff; }
+
+    /* Dual Ledger Entry View */
+    .ledger-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .ledger-col {
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .ledger-col-header {
+      padding: 10px 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid var(--border);
+    }
+
+    .ledger-col-header.jama {
+      background-color: var(--jama-bg);
+      color: var(--jama-text);
+      border-color: var(--jama-border);
+    }
+
+    .ledger-col-header.kharch {
+      background-color: var(--kharch-bg);
+      color: var(--kharch-text);
+      border-color: var(--kharch-border);
+    }
+
+    /* Data Tables */
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 6px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #334155;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+
+    .hw-num {
+      font-family: var(--hw-font);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .jama-num { color: var(--ink-blue); }
+    .kharch-num { color: var(--ink-red); }
+
+    /* Modals (Adaptive Bottom Sheet on Mobile) */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      animation: modalFade 0.2s ease-out;
+    }
+
+    @keyframes modalFade {
+      from { transform: translateY(15px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 14px 16px;
+      border-bottom: 1.5px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .modal-header h3 {
+      font-size: 1.1rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #64748b;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-footer {
+      padding: 12px 16px;
+      border-top: 1.5px solid #e2e8f0;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      background: #f8fafc;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* Official Printable Register Styles */
+    .register-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      background: #ffffff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .cashbook-sheet {
+      background: #ffffff;
+      border: 1.5px solid #64748b;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .register-header-block {
+      text-align: center;
+      border-bottom: 2px solid #334155;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .reg-school-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .reg-sub-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 3px;
+    }
+
+    .reg-meta {
+      font-size: 0.9rem;
+      color: #475569;
+      margin-top: 3px;
+    }
+
+    .reg-hw {
+      font-family: var(--hw-font);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink-blue);
+    }
+
+    .reg-summary-box {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border: 1px dashed #64748b;
+      border-radius: 4px;
+      font-size: 0.92rem;
+    }
+
+    .reg-akshari-box {
+      font-family: var(--hw-font);
+      font-size: 1.05rem;
+      color: var(--ink-blue);
+      margin-top: 8px;
+      padding: 8px 12px;
+      background-color: #eff6ff;
+      border-left: 4px solid var(--accent);
+      border-radius: 2px;
+      line-height: 1.4;
+    }
+
+    .reg-sign-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+      padding: 0 20px;
+      font-weight: 700;
+    }
+
+    /* Print Specific Isolation (Portrait A4 with Dual Columns Side-by-Side) */
+    #printContainer {
+      display: none;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 8mm 8mm;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #printContainer, #printContainer * {
+        visibility: visible;
+      }
+      #printContainer {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: #ffffff;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .cashbook-sheet {
+        border: 1.5px solid #000000 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 6mm 8mm !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        background: #ffffff !important;
+      }
+      .print-dual-ledger {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+      }
+    }
+
+    /* ==================== MOBILE SPECIFIC RESPONSIVE STYLES ==================== */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 8px 10px;
+        position: relative !important;
+        top: auto !important;
+      }
+      .nav-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+      }
+      .brand-section {
+        justify-content: center;
+      }
+      .top-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+      .ctrl-group {
+        width: 100%;
+        padding: 4px 6px;
+      }
+      .ctrl-group select {
+        width: 100%;
+        font-size: 0.82rem;
+      }
+      .tabs-bar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 99 !important;
+        background: #ffffff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+      .tabs-container {
+        padding: 0 6px;
+      }
+      .tab-btn {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+      }
+      .main-content {
+        margin: 10px auto;
+        padding: 0 8px 75px; /* Extra bottom space for mobile floating action bar */
+      }
+      .card {
+        padding: 12px 10px;
+        margin-bottom: 12px;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .stat-card {
+        padding: 8px 10px;
+      }
+      .stat-value {
+        font-size: 1.15rem;
+      }
+      .stat-label {
+        font-size: 0.74rem;
+      }
+      .ledger-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      /* Bottom sheet style for modals on phones */
+      .modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .modal-box {
+        max-width: 100%;
+        border-radius: 14px 14px 0 0;
+        max-height: 92vh;
+        margin: 0;
+      }
+      input, select, textarea {
+        font-size: 16px !important; /* Prevents auto-zoom on mobile iOS/Android */
+        min-height: 38px;
+      }
+      /* Mobile quick bottom bar */
+      .mobile-quick-bar {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-top: 1.5px solid #cbd5e1;
+        padding: 8px 12px;
+        z-index: 90;
+        gap: 8px;
+        box-shadow: 0 -3px 10px rgba(0,0,0,0.08);
+      }
+      .mobile-quick-bar.show-bar {
+        display: flex !important;
+      }
+      .mobile-quick-bar .btn {
+        flex: 1;
+        padding: 10px;
+        font-size: 0.95rem;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-quick-bar {
+        display: none !important;
+      }
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 60px;
+      right: 16px;
+      left: 16px;
+      max-width: 380px;
+      margin: 0 auto;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+      z-index: 9999;
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- No-Script Alert for WhatsApp / Android Default HTML Viewer -->
+  <noscript>
+    <div style="background: #b91c1c; color: #ffffff; padding: 14px 16px; text-align: center; font-family: sans-serif; font-size: 1rem; font-weight: bold; line-height: 1.5; border-bottom: 2px solid #7f1d1d;">
+      ⚠️ आपल्या मोबाईलच्या इन-बिल्ट व्ह्यूअरमध्ये JavaScript बंद आहे.<br>
+      हे ॲप चालवण्यासाठी कृपया वरील उजव्या कोपऱ्यातील <strong>३ टिंब (⋮)</strong> वर क्लिक करून <strong>'Open in Chrome' (किंवा Open in Browser)</strong> निवडा!
+    </div>
+  </noscript>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar no-print">
+    <div class="nav-container">
+      <div class="brand-section" onclick="switchTab('heads')">
+        <div class="brand-icon">🏫</div>
+        <div>
+          <div class="brand-title" id="displaySchoolName">शाळा सादील खर्च व कॅश बुक प्रणाली</div>
+          <div class="brand-sub" id="displaySchoolSub">महाराष्ट्र प्राथमिक/माध्यमिक शाळा हिशोब</div>
+        </div>
+      </div>
+
+      <div class="top-controls">
+        <!-- Account Selector -->
+        <div class="ctrl-group">
+          <label for="selectAccount">📂 बँक खाते:</label>
+          <select id="selectAccount" onchange="changeAccount(this.value)">
+            <!-- Populated dynamically -->
+          </select>
+          <button class="btn btn-sm btn-primary" onclick="openNewAccountModal()" title="नवीन बँक खाते जोडा">➕</button>
+        </div>
+
+        <!-- Year Selector -->
+        <div class="ctrl-group">
+          <label for="selectYear">📅 वर्ष:</label>
+          <select id="selectYear" onchange="changeYear(this.value)">
+            <!-- Populated dynamically -->
+          </select>
+          <button class="btn btn-sm btn-success" onclick="openNewYearModal()" title="नवीन वर्ष जोडा">➕</button>
+        </div>
+
+        <button class="btn btn-outline btn-sm" style="grid-column: span 2;" onclick="openSchoolModal()" title="शाळेची माहिती बदला">
+          ✏️ शाळेचे नाव व माहिती बदला
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sub Navigation Tabs -->
+  <nav class="tabs-bar no-print">
+    <div class="tabs-container">
+      <button class="tab-btn active" onclick="switchTab('heads')">
+        📑 1. दि. 1 एप्रिल शिल्लक
+      </button>
+      <button class="tab-btn" onclick="switchTab('entry')">
+        📝 2. माहेनिहाय डेटा एन्ट्री
+      </button>
+      <button class="tab-btn" onclick="switchTab('register')">
+        📖 3. कॅश बुक रजिस्टर
+      </button>
+      <button class="tab-btn" onclick="switchTab('annual')">
+        📊 4. अंतिम ताळेबंद
+      </button>
+      <button class="tab-btn" onclick="switchTab('backup')">
+        💾 5. बॅकअप व सेटिंग
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="main-content no-print">
+
+    <!-- ==================== TAB 1: 1 APRIL ROJI SHILLAK (HEADS & OPENING) ==================== -->
+    <section id="tab-heads" class="tab-pane active">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            📑 1. दि. 01 एप्रिल सुरुवातीची शिल्लक (<span class="activeYearText"></span>)
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="btn btn-print-action btn-sm" onclick="printSection('heads')">
+              🖨️ 1 एप्रिल शिल्लक प्रिंट
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="openNewHeadModal()">
+              ➕ नवीन हेड जोडा
+            </button>
+          </div>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 12px;">
+          टीप: चालू बँक खात्यातील <strong>01/04 रोजीची</strong> शिल्लक खाली भरा. ती आपोआप संपूर्ण 12 महिन्यांच्या कॅश बुकमध्ये सुरुवातीची शिल्लक म्हणून घेतली जाईल.
+        </p>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr style="background: #e2e8f0;">
+                <th style="width: 8%;">अ.क्र.</th>
+                <th style="width: 44%;">खात्याचे नाव / उप-हेड</th>
+                <th style="width: 28%;">01/04 सुरुवातीची शिल्लक (₹)</th>
+                <th style="width: 20%;">क्रिया</th>
+              </tr>
+            </thead>
+            <tbody id="headsTableBody">
+              <!-- Populated by JS -->
+            </tbody>
+            <tfoot>
+              <tr style="background: #eff6ff; font-weight: bold; font-size: 1rem;">
+                <td colspan="2" class="text-center">एकूण सुरुवातीची शिल्लक:</td>
+                <td class="text-right hw-num jama-num" id="headsTotalOpening">₹ 0 /-</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="reg-akshari-box" id="headsAkshariNote" style="margin-top: 12px;">
+          <!-- Akshari generated by JS -->
+        </div>
+      </div>
+
+      <!-- Bank Account Details Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏦 चालू बँक खाते तपशील</div>
+          <button class="btn btn-secondary btn-sm" onclick="saveAccountDetails()">💾 सेव्ह करा</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>कॅश बुक / खात्याचे नाव:</label>
+            <input type="text" id="accEditName" placeholder="उदा. शालेय पोषण आहार खाते" />
+          </div>
+          <div class="form-group">
+            <label>बँकेचे नाव:</label>
+            <input type="text" id="accEditBank" placeholder="उदा. बँक ऑफ महाराष्ट्र" />
+          </div>
+        </div>
+        <div class="form-row" style="margin-top: 8px;">
+          <div class="form-group">
+            <label>बँक खाते क्रमांक (A/C No.):</label>
+            <input type="text" id="accEditNumber" placeholder="उदा. 60123456789" />
+          </div>
+          <div class="form-group">
+            <label>IFSC कोड:</label>
+            <input type="text" id="accEditIfsc" placeholder="उदा. MAHB0000123" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: MONTHLY DATA ENTRY (12 MONTHS) ==================== -->
+    <section id="tab-entry" class="tab-pane">
+      <!-- Toolbar for Entry Tab with Multiple Print Options -->
+      <div class="card" style="padding: 12px; margin-bottom: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div style="font-weight: 700; color: var(--primary); font-size: 1.05rem;">
+            📝 2. माहेनिहाय डेटा एन्ट्री (<span class="activeYearText"></span>)
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="btn btn-print-action btn-sm" onclick="printSection('entry-month')" title="चालू निवडलेल्या महिन्याचा समोरासमोर कॅश बुक प्रिंट करा">
+              🖨️ चालू महिना प्रिंट
+            </button>
+            <button class="btn btn-success btn-sm" onclick="printSection('entry-all')" title="12 महिन्यांचे सर्व व्यवहार नोंदी समोरासमोर व्हर्टिकल PDF काढा">
+              📑 सर्व 12 महिने एकत्रित PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Month Selection Strip -->
+      <div class="months-strip" id="monthsStrip">
+        <!-- Month buttons rendered by JS -->
+      </div>
+
+      <!-- Quick Month Stats -->
+      <div class="stats-grid">
+        <div class="stat-card opening">
+          <span class="stat-label">मागील शिल्लक (Opening)</span>
+          <span class="stat-value" id="cardOpeningBal">₹ 0 /-</span>
+        </div>
+        <div class="stat-card jama">
+          <span class="stat-label">चालू महिना जमा</span>
+          <span class="stat-value jama-num" id="cardMonthJama">₹ 0 /-</span>
+        </div>
+        <div class="stat-card kharch">
+          <span class="stat-label">चालू महिना खर्च</span>
+          <span class="stat-value kharch-num" id="cardMonthKharch">₹ 0 /-</span>
+        </div>
+        <div class="stat-card closing">
+          <span class="stat-label">चालू महिना शिल्लक</span>
+          <span class="stat-value" id="cardClosingBal">₹ 0 /-</span>
+        </div>
+      </div>
+
+      <!-- Dual Side Ledger View (समोरासमोर दोन बाजू) -->
+      <div class="ledger-grid">
+        <!-- JAMA COLUMN -->
+        <div class="ledger-col">
+          <div class="ledger-col-header jama">
+            <span>: जमा बाजू (Receipts) :</span>
+            <button class="btn btn-sm btn-success" onclick="openTransactionModal('jama')">
+              ➕ नवीन जमा नोंद
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 14%;">दिनांक</th>
+                  <th style="width: 28%;">हेड / खाते</th>
+                  <th style="width: 28%;">तपशील / संदर्भ</th>
+                  <th style="width: 18%;">रक्कम (₹)</th>
+                  <th style="width: 12%;">क्रिया</th>
+                </tr>
+              </thead>
+              <tbody id="jamaTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+              <tfoot>
+                <tr style="background:#ecfdf5; font-weight: bold;">
+                  <td colspan="3" class="text-center">चालू महिना एकूण जमा:</td>
+                  <td class="text-right hw-num jama-num" id="jamaSubTotal">₹ 0</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+
+        <!-- KHARCH COLUMN -->
+        <div class="ledger-col">
+          <div class="ledger-col-header kharch">
+            <span>: खर्च बाजू (Payments) :</span>
+            <button class="btn btn-sm btn-danger" onclick="openTransactionModal('kharch')">
+              ➕ नवीन खर्च नोंद
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 14%;">दिनांक</th>
+                  <th style="width: 25%;">हेड / खाते</th>
+                  <th style="width: 31%;">खर्च तपशील / बिल</th>
+                  <th style="width: 18%;">रक्कम (₹)</th>
+                  <th style="width: 12%;">क्रिया</th>
+                </tr>
+              </thead>
+              <tbody id="kharchTableBody">
+                <!-- Populated by JS -->
+              </tbody>
+              <tfoot>
+                <tr style="background:#fff1f2; font-weight: bold;">
+                  <td colspan="3" class="text-center">चालू महिना एकूण खर्च:</td>
+                  <td class="text-right hw-num kharch-num" id="kharchSubTotal">₹ 0</td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Month Breakdown & Akshari Note Box -->
+      <div class="card" style="margin-top: 16px;">
+        <h4 style="margin-bottom: 6px; color: var(--primary); font-size: 0.95rem;">📋 चालू महिना अखेर हेडनिहाय शिल्लक गोषवारा:</h4>
+        <div id="monthHeadwiseSummary" style="font-size: 0.88rem; line-height: 1.6; color: #334155;">
+          <!-- Headwise breakdown rendered by JS -->
+        </div>
+        <div class="reg-akshari-box" id="monthAkshariNote" style="margin-top: 10px;">
+          <!-- Akshari note rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: REGISTER VIEW (PRINT READY) ==================== -->
+    <section id="tab-register" class="tab-pane">
+      <div class="register-toolbar">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <strong>📖 रजिस्टर दृश्य:</strong>
+          <select id="regFilterMonth" onchange="renderRegisterView()">
+            <option value="all">📖 संपूर्ण आर्थिक वर्ष (12 महिने + गोषवारा)</option>
+            <option value="opening">1ले पान : सुरुवातीची शिल्लक</option>
+            <option value="4">माहे एप्रिल</option>
+            <option value="5">माहे मे</option>
+            <option value="6">माहे जून</option>
+            <option value="7">माहे जुलै</option>
+            <option value="8">माहे ऑगस्ट</option>
+            <option value="9">माहे सप्टेंबर</option>
+            <option value="10">माहे ऑक्टोबर</option>
+            <option value="11">माहे नोव्हेंबर</option>
+            <option value="12">माहे डिसेंबर</option>
+            <option value="1">माहे जानेवारी</option>
+            <option value="2">माहे फेब्रुवारी</option>
+            <option value="3">माहे मार्च</option>
+            <option value="final">शेवटचे पान : वार्षिक ताळेबंद</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="printSection('register')">
+          📄 रजिस्टर PDF डाऊनलोड / प्रिंट
+        </button>
+      </div>
+
+      <!-- Register Container -->
+      <div id="registerSheetsContainer">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: ANNUAL BALANCE SHEET ==================== -->
+    <section id="tab-annual" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            📊 वार्षिक अंतिम हेडनिहाय ताळेबंद (<span class="activeYearText"></span>)
+          </div>
+          <button class="btn btn-print-action btn-sm" onclick="printSection('annual')">
+            🖨️ ताळेबंद प्रिंट / PDF
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr style="background: #e2e8f0;">
+                <th style="width: 6%;">अ.क्र.</th>
+                <th style="width: 34%;">खात्याचे नाव / हेड</th>
+                <th style="width: 15%;">सुरुवातीची शिल्लक<br><small>(01/04)</small></th>
+                <th style="width: 15%;">वर्षभरातील जमा</th>
+                <th style="width: 15%;">वर्षभरातील खर्च</th>
+                <th style="width: 15%;">अंतिम शिल्लक<br><small>(31/03)</small></th>
+              </tr>
+            </thead>
+            <tbody id="annualSheetBody">
+              <!-- Rendered by JS -->
+            </tbody>
+            <tfoot>
+              <tr style="background: #eff6ff; font-weight: bold; font-size: 1rem;">
+                <td colspan="2" class="text-center">एकूण (Grand Total)</td>
+                <td class="text-right hw-num jama-num" id="annTotOpening">₹ 0</td>
+                <td class="text-right hw-num jama-num" id="annTotJama">₹ 0</td>
+                <td class="text-right hw-num kharch-num" id="annTotKharch">₹ 0</td>
+                <td class="text-right hw-num jama-num" id="annTotClosing">₹ 0</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div class="reg-akshari-box" id="annualAkshariNote" style="margin-top: 16px;">
+          <!-- Akshari note for annual balance -->
+        </div>
+
+        <div class="reg-sign-row" style="margin-top: 25px;">
+          <div>लिपीक / वर्गशिक्षक</div>
+          <div>मुख्याध्यापक सही व शिक्का</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: BACKUP & SETTINGS ==================== -->
+    <section id="tab-backup" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💾 डेटा बॅकअप व सुरक्षितता</div>
+        </div>
+        <p style="color: #475569; font-size: 0.88rem; margin-bottom: 14px;">
+          तुमचा सर्व डेटा या मोबाईल किंवा कॉम्प्युटरच्या ब्राउझरमध्ये सुरक्षितपणे साठवला जातो. भविष्यात डेटा सुरक्षित ठेवण्यासाठी किंवा दुसऱ्या फोनवर नेण्यासाठी बॅकअप फाईल डाऊनलोड करा.
+        </p>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-success btn-sm" onclick="exportDataToFile()">
+            📥 संपूर्ण डेटा बॅकअप डाऊनलोड (.json)
+          </button>
+          <label class="btn btn-warning btn-sm" style="cursor: pointer;">
+            📤 बॅकअप फाईल रिस्टोर करा
+            <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importDataFromFile(event)" />
+          </label>
+          <button class="btn btn-danger btn-sm" onclick="resetToSampleData()">
+            🔄 मूळ नमुना डेटा पूर्ववत करा
+          </button>
+        </div>
+      </div>
+
+      <!-- All Bank Accounts Management -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏦 सर्व बँक खात्यांची यादी</div>
+          <button class="btn btn-primary btn-sm" onclick="openNewAccountModal()">➕ नवीन खाते जोडा</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr style="background: #e2e8f0;">
+                <th>खात्याचे नाव</th>
+                <th>बँकेचे नाव</th>
+                <th>खाते क्रमांक</th>
+                <th>IFSC कोड</th>
+                <th>क्रिया</th>
+              </tr>
+            </thead>
+            <tbody id="allAccountsListBody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Floating Quick Add Bar (Only in Tab 2 on Mobile) -->
+  <div class="mobile-quick-bar no-print" id="mobileQuickBar" style="display: none;">
+    <button class="btn btn-success" onclick="openTransactionModal('jama')">
+      ➕ नवीन जमा नोंद
+    </button>
+    <button class="btn btn-danger" onclick="openTransactionModal('kharch')">
+      ➕ नवीन खर्च नोंद
+    </button>
+  </div>
+
+  <!-- ==================== DEDICATED PRINT CONTAINER (FOR PERFECT VERTICAL A4 PDF) ==================== -->
+  <div id="printContainer" class="print-only">
+    <!-- Dynamically populated whenever any Print button is clicked -->
+  </div>
+
+  <!-- ==================== MODALS (Touch Optimized Bottom-Sheets on Mobile) ==================== -->
+
+  <!-- 1. Transaction Modal (Jama / Kharch) -->
+  <div class="modal-backdrop" id="txModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="txModalTitle">नोंद जोडा</h3>
+        <button class="modal-close" onclick="closeModal('txModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="txType" />
+        <input type="hidden" id="txEditId" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>दिनांक: *</label>
+            <input type="date" id="txDate" required />
+          </div>
+          <div class="form-group">
+            <label>रक्कम (₹): *</label>
+            <input type="number" id="txAmount" placeholder="उदा. 500" required min="0" step="any" inputmode="decimal" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>खाते / हेड (Head of Account): *</label>
+          <select id="txHead" required>
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+
+        <!-- Kharch specific fields -->
+        <div id="kharchOnlyFields" style="display: none;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>बिल क्रमांक / व्हाउचर क्र.:</label>
+              <input type="text" id="txBillNo" placeholder="उदा. 247008" />
+            </div>
+            <div class="form-group">
+              <label>पुरवठादाराचे नाव व पत्ता:</label>
+              <input type="text" id="txVendor" placeholder="उदा. श्री गणेश किराणा स्टोअर्स" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>नग संख्या (Qty):</label>
+              <input type="text" id="txQty" placeholder="उदा. 10 किंवा निरंक" />
+            </div>
+            <div class="form-group">
+              <label>शेरा / टिप्पणी:</label>
+              <input type="text" id="txRemarks" placeholder="शेरा असल्यास" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Jama specific fields -->
+        <div id="jamaOnlyFields">
+          <div class="form-row">
+            <div class="form-group">
+              <label>पावती क्रमांक / संदर्भ:</label>
+              <input type="text" id="txReceiptNo" placeholder="पावती क्र. असल्यास" />
+            </div>
+            <div class="form-group">
+              <label>चेक नंबर व तारीख:</label>
+              <input type="text" id="txChqNo" placeholder="उदा. Cheque / NEFT / PFMS" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>तपशील / शेरा (Particulars / Details): *</label>
+          <input type="text" id="txDetails" placeholder="उदा. शा.पो.आहार इंधन खर्च" required />
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('txModal')">रद्द करा</button>
+        <button class="btn btn-primary" onclick="saveTransaction()">💾 जतन करा (Save)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. New Bank Account Modal -->
+  <div class="modal-backdrop" id="accountModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>➕ नवीन बँक खाते जोडा</h3>
+        <button class="modal-close" onclick="closeModal('accountModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>खात्याचे नाव: *</label>
+          <input type="text" id="newAccName" placeholder="उदा. समग्र शिक्षा / क्रीडा निधी खाते" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>बँकेचे नाव:</label>
+            <input type="text" id="newAccBank" placeholder="उदा. स्टेट बँक ऑफ इंडिया" />
+          </div>
+          <div class="form-group">
+            <label>बँक खाते क्रमांक:</label>
+            <input type="text" id="newAccNumber" placeholder="उदा. 34567890123" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>IFSC कोड:</label>
+          <input type="text" id="newAccIfsc" placeholder="उदा. SBIN0001234" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('accountModal')">रद्द करा</button>
+        <button class="btn btn-success" onclick="saveNewAccount()">➕ खाते तयार करा</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. New Year Modal -->
+  <div class="modal-backdrop" id="yearModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>➕ नवीन आर्थिक वर्ष जोडा</h3>
+        <button class="modal-close" onclick="closeModal('yearModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>नवीन आर्थिक वर्ष (Financial Year): *</label>
+          <input type="text" id="newYearInput" placeholder="उदा. 2025-26" required />
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; cursor: pointer; font-size: 0.88rem;">
+            <input type="checkbox" id="carryForwardCheck" checked />
+            मागील वर्षाची 31 मार्च अंतिम शिल्लक नवीन वर्षात सुरुवातीची शिल्लक म्हणून पुढे न्या.
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('yearModal')">रद्द करा</button>
+        <button class="btn btn-success" onclick="saveNewYear()">➕ वर्ष जोडा</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. New Head Modal -->
+  <div class="modal-backdrop" id="headModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="headModalTitle">➕ नवीन उप-हेड जोडा</h3>
+        <button class="modal-close" onclick="closeModal('headModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editHeadId" />
+        <div class="form-group">
+          <label>हेड / खात्याचे नाव: *</label>
+          <input type="text" id="newHeadName" placeholder="उदा. किरकोळ सादील किंवा स्टेशनरी" required />
+        </div>
+        <div class="form-group">
+          <label>01 एप्रिल रोजी सुरुवातीची शिल्लक रक्कम (₹):</label>
+          <input type="number" id="newHeadBalance" placeholder="0" min="0" step="any" inputmode="decimal" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('headModal')">रद्द करा</button>
+        <button class="btn btn-primary" onclick="saveHead()">💾 सेव्ह करा</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. School Details Modal -->
+  <div class="modal-backdrop" id="schoolModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>🏫 शाळेची माहिती (School Information)</h3>
+        <button class="modal-close" onclick="closeModal('schoolModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>शाळेचे नाव (School Name):</label>
+          <input type="text" id="schoolNameInput" placeholder="उदा. जि.प. प्राथमिक शाळा ..." />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>केंद्र (Center):</label>
+            <input type="text" id="schoolCenterInput" placeholder="केंद्र" />
+          </div>
+          <div class="form-group">
+            <label>तालुका (Taluka):</label>
+            <input type="text" id="schoolTalukaInput" placeholder="तालुका" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>जिल्हा (District):</label>
+            <input type="text" id="schoolDistrictInput" placeholder="जिल्हा" />
+          </div>
+          <div class="form-group">
+            <label>युडायस कोड (UDISE Code):</label>
+            <input type="text" id="schoolUdiseInput" placeholder="27..." />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>मुख्याध्यापक / प्रभारी नाव:</label>
+          <input type="text" id="schoolHmInput" placeholder="मुख्याध्यापकांचे नाव" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('schoolModal')">रद्द करा</button>
+        <button class="btn btn-primary" onclick="saveSchoolInfo()">💾 माहिती सेव्ह करा</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Element -->
+  <div id="toast">संदेश</div>
+
+  <!-- ==================== APPLICATION SCRIPT ==================== -->
+  <script>
+    const FINANCIAL_MONTHS = [
+      { num: 4, name: "एप्रिल", title: "माहे एप्रिल" },
+      { num: 5, name: "मे", title: "माहे मे" },
+      { num: 6, name: "जून", title: "माहे जून" },
+      { num: 7, name: "जुलै", title: "माहे जुलै" },
+      { num: 8, name: "ऑगस्ट", title: "माहे ऑगस्ट" },
+      { num: 9, name: "सप्टेंबर", title: "माहे सप्टेंबर" },
+      { num: 10, name: "ऑक्टोबर", title: "माहे ऑक्टोबर" },
+      { num: 11, name: "नोव्हेंबर", title: "माहे नोव्हेंबर" },
+      { num: 12, name: "डिसेंबर", title: "माहे डिसेंबर" },
+      { num: 1, name: "जानेवारी", title: "माहे जानेवारी" },
+      { num: 2, name: "फेब्रुवारी", title: "माहे फेब्रुवारी" },
+      { num: 3, name: "मार्च", title: "माहे मार्च" }
+    ];
+
+    const STORAGE_KEY = "MAHA_SCHOOL_CASHBOOK_APP_V3";
+
+    function getDefaultData() {
+      return {
+        schoolInfo: {
+          name: "जिल्हा परिषद प्राथमिक शाळा",
+          center: "केंद्र",
+          taluka: "तालुका",
+          district: "जिल्हा",
+          udise: "",
+          headmaster: "मुख्याध्यापक"
+        },
+        currentAccountId: "acc_mdm_sadil",
+        currentYear: "2024-25",
+        currentMonth: 4,
+        accounts: [
+          {
+            id: "acc_mdm_sadil",
+            name: "शाळा सादील खर्च व शा.पो.आहार (एकत्रित कॅश बुक)",
+            bankName: "बँक ऑफ महाराष्ट्र",
+            accountNo: "",
+            ifsc: "",
+            years: {
+              "2024-25": {
+                heads: [
+                  { id: "h1", name: "4% सादील (4% Sadil)", openingBalance: 793 },
+                  { id: "h2", name: "सुवर्ण महोत्सवी (Suvarna Mahotsav)", openingBalance: 4500 },
+                  { id: "h3", name: "शा.पो.आहार इंधन खर्च (MDM Fuel)", openingBalance: 2994 },
+                  { id: "h4", name: "शा.पो.आहार मुख्याध्यापक / स्वयंपाकी मानधन", openingBalance: 500 },
+                  { id: "h5", name: "शा.पो.आहार अंडी / केळी अनुदान", openingBalance: 289 }
+                ],
+                months: {
+                  "4": {
+                    jama: [
+                      { id: "j1", date: "2024-04-02", headId: "h5", receiptNo: "", chqNo: "", amount: 32, details: "शा.पो.आहार अंडी केळी" },
+                      { id: "j2", date: "2024-04-02", headId: "h5", receiptNo: "", chqNo: "", amount: 40, details: "शा.पो.आहार अंडी केळी" }
+                    ],
+                    kharch: []
+                  },
+                  "5": {
+                    jama: [
+                      { id: "j3", date: "2024-05-30", headId: "h5", receiptNo: "", chqNo: "", amount: 240, details: "शा.पो.आहार अंडी फळे" }
+                    ],
+                    kharch: []
+                  },
+                  "6": {
+                    jama: [
+                      { id: "j4", date: "2024-06-18", headId: "h3", receiptNo: "", chqNo: "", amount: 179, details: "शा.पो.आहार इंधन खर्च" },
+                      { id: "j5", date: "2024-06-18", headId: "h3", receiptNo: "", chqNo: "", amount: 306, details: "शा.पो.आहार इंधन खर्च" }
+                    ],
+                    kharch: []
+                  },
+                  "7": {
+                    jama: [
+                      { id: "j6", date: "2024-07-09", headId: "h3", receiptNo: "", chqNo: "", amount: 190, details: "शा.पो.आहार इंधन भाजीपाला" }
+                    ],
+                    kharch: []
+                  },
+                  "8": {
+                    jama: [],
+                    kharch: [
+                      { id: "k1", date: "2024-08-30", headId: "h3", billNo: "247008", vendor: "", item: "इंधन", qty: "", amount: 2170, details: "शा.पो.आहार इंधन (बिल 247008)", remarks: "" },
+                      { id: "k2", date: "2024-08-30", headId: "h5", billNo: "247009", vendor: "", item: "अंडी केळी", qty: "", amount: 601, details: "शा.पो.आहार अंडी केळी (बिल 247009)", remarks: "" },
+                      { id: "k3", date: "2024-08-30", headId: "h4", billNo: "", vendor: "", item: "मानधन", qty: "", amount: 500, details: "शा.पो.आहार मुख्या. मानधन", remarks: "" },
+                      { id: "k4", date: "2024-08-30", headId: "h1", billNo: "", vendor: "", item: "झेरॉक्स", qty: "", amount: 179, details: "झेरॉक्स खर्च (4% सादील)", remarks: "" }
+                    ]
+                  },
+                  "9": {
+                    jama: [
+                      { id: "j7", date: "2024-09-11", headId: "h3", receiptNo: "", chqNo: "", amount: 160, details: "शा.पो.आहार इंधन खर्च" }
+                    ],
+                    kharch: []
+                  },
+                  "10": {
+                    jama: [
+                      { id: "j8", date: "2024-10-30", headId: "h5", receiptNo: "", chqNo: "", amount: 120, details: "अंडी केळी अनुदान" }
+                    ],
+                    kharch: []
+                  },
+                  "11": { jama: [], kharch: [] },
+                  "12": { jama: [], kharch: [] },
+                  "1": {
+                    jama: [
+                      { id: "j9", date: "2025-01-02", headId: "h3", receiptNo: "", chqNo: "", amount: 412, details: "शा.पो.आहार इंधन खर्च" },
+                      { id: "j10", date: "2025-01-02", headId: "h3", receiptNo: "", chqNo: "", amount: 399, details: "शा.पो.आहार इंधन खर्च" }
+                    ],
+                    kharch: []
+                  },
+                  "2": { jama: [], kharch: [] },
+                  "3": { jama: [], kharch: [] }
+                }
+              }
+            }
+          },
+          {
+            id: "acc_4percent_only",
+            name: "4% सादील खाते (4% Sadil Bank A/c)",
+            bankName: "बँक ऑफ इंडिया",
+            accountNo: "",
+            ifsc: "",
+            years: {
+              "2024-25": {
+                heads: [
+                  { id: "s1", name: "कार्यालयीन सादील", openingBalance: 793 },
+                  { id: "s2", name: "स्टेशनरी व झेरॉक्स", openingBalance: 0 },
+                  { id: "s3", name: "किरकोळ दुरुस्ती", openingBalance: 0 }
+                ],
+                months: {}
+              }
+            }
+          },
+          {
+            id: "acc_ssa",
+            name: "सर्व शिक्षा अभियान / समग्र शिक्षा (SSA A/c)",
+            bankName: "स्टेट बँक ऑफ इंडिया",
+            accountNo: "",
+            ifsc: "",
+            years: {
+              "2024-25": {
+                heads: [
+                  { id: "ssa1", name: "शाळा संयुक्त अनुदान (Composite Grant)", openingBalance: 25000 },
+                  { id: "ssa2", name: "मोफत गणवेश योजना (Uniform)", openingBalance: 0 },
+                  { id: "ssa3", name: "क्रीडा व शिक्षक साहित्य अनुदान", openingBalance: 5000 }
+                ],
+                months: {}
+              }
+            }
+          }
+        ]
+      };
+    }
+
+    let appData = null;
+
+    // Mobile / Sandboxed storage fallback wrapper
+    const safeStorage = {
+      _mem: {},
+      getItem(key) {
+        try {
+          if (typeof window !== 'undefined' && window.localStorage) {
+            const val = window.localStorage.getItem(key);
+            if (val !== null) return val;
+          }
+        } catch (e) {}
+        try {
+          if (typeof window !== 'undefined' && window.sessionStorage) {
+            const val = window.sessionStorage.getItem(key);
+            if (val !== null) return val;
+          }
+        } catch (e) {}
+        return this._mem[key] || null;
+      },
+      setItem(key, val) {
+        let ok = false;
+        try {
+          if (typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem(key, val);
+            ok = true;
+          }
+        } catch (e) {}
+        try {
+          if (typeof window !== 'undefined' && window.sessionStorage) {
+            window.sessionStorage.setItem(key, val);
+            ok = true;
+          }
+        } catch (e) {}
+        this._mem[key] = val;
+        return ok;
+      }
+    };
+
+    function loadData() {
+      try {
+        const stored = safeStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          appData = JSON.parse(stored);
+        } else {
+          const prev = safeStorage.getItem("MAHA_SCHOOL_CASHBOOK_APP_V2");
+          if (prev) {
+            appData = JSON.parse(prev);
+            if (appData.currentYear === "२०२४-२५") appData.currentYear = "2024-25";
+            appData.accounts.forEach(a => {
+              if (a.years["२०२४-२५"]) {
+                a.years["2024-25"] = a.years["२०२४-२५"];
+                delete a.years["२०२४-२५"];
+              }
+            });
+            saveData();
+          }
+        }
+      } catch (e) {
+        console.error("Error loading stored data:", e);
+      }
+
+      if (!appData || !appData.accounts || appData.accounts.length === 0) {
+        appData = getDefaultData();
+        saveData();
+      }
+
+      if (!appData.accounts.find(a => a.id === appData.currentAccountId)) {
+        appData.currentAccountId = appData.accounts[0].id;
+      }
+
+      const acc = getCurrentAccount();
+      if (!acc.years[appData.currentYear]) {
+        const yearKeys = Object.keys(acc.years);
+        appData.currentYear = yearKeys[0] || "2024-25";
+      }
+
+      if (!appData.currentMonth) {
+        appData.currentMonth = 4;
+      }
+    }
+
+    function saveData() {
+      try {
+        safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+      } catch (e) {
+        console.error("Failed to save data:", e);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 2500);
+    }
+
+    function getCurrentAccount() {
+      return appData.accounts.find(a => a.id === appData.currentAccountId) || appData.accounts[0];
+    }
+
+    function getCurrentYearData() {
+      const acc = getCurrentAccount();
+      if (!acc.years[appData.currentYear]) {
+        acc.years[appData.currentYear] = { heads: [], months: {} };
+      }
+      return acc.years[appData.currentYear];
+    }
+
+    function getMonthData(mNum) {
+      const yData = getCurrentYearData();
+      if (!yData.months) yData.months = {};
+      if (!yData.months[mNum]) {
+        yData.months[mNum] = { jama: [], kharch: [] };
+      }
+      return yData.months[mNum];
+    }
+
+    function toMarathiNum(num) {
+      if (num === null || num === undefined || isNaN(num)) return "0";
+      return Math.round(num).toLocaleString('en-IN');
+    }
+
+    function formatDisplayDate(dStr) {
+      if (!dStr) return "-";
+      const parts = dStr.split("-");
+      if (parts.length === 3) {
+        const dd = parts[2];
+        const mm = parts[1];
+        const yy = parts[0].slice(2);
+        return `${dd}/${mm}/${yy}`;
+      }
+      return dStr;
+    }
+
+    function numberToMarathiWords(n) {
+      const num = Math.round(Number(n));
+      if (isNaN(num) || num === 0) return "शून्य रुपये मात्र";
+
+      const units = ["", "एक", "दोन", "तीन", "चार", "पाच", "सहा", "सात", "आठ", "नऊ", "दहा",
+        "अकरा", "बारा", "तेरा", "चौदा", "पंधरा", "सोळा", "सतरा", "अठरा", "एकोणीस", "वीस",
+        "एकवीस", "बावीस", "तेवीस", "चोवीस", "पंचवीस", "सव्वीस", "सत्तावीस", "अठ्ठावीस", "एकोणतीस", "तीस",
+        "एकतीस", "बत्तीस", "तेहेतीस", "चौतीस", "पस्तीस", "छत्तीस", "सदतीस", "अडतीस", "एकोणचाळीस", "चाळीस",
+        "एक्केचाळीस", "बेचाळीस", "त्रेचाळीस", "चव्वेचाळीस", "पंचेचाळीस", "सेहेचाळीस", "सत्तेचाळीस", "अड्ठेचाळीस", "एकोणपन्नास", "पन्नास",
+        "एक्कावन्न", "बावन्न", "त्रेपन्न", "चौपन्न", "पंचावन्न", "छप्पन्न", "सत्तावन्न", "अठ्ठावन्न", "एकोणसाठ", "साठ",
+        "एकसष्ठ", "बासष्ठ", "त्रेसष्ठ", "चौसष्ठ", "पासष्ठ", "सहासष्ठ", "सदुसष्ठ", "अडुसष्ठ", "एकोणसत्तर", "सत्तर",
+        "एकाहत्तर", "बाहत्तर", "त्र्याहत्तर", "चौऱ्याहत्तर", "पंच्याहत्तर", "शहात्तर", "सत्याहत्तर", "अठ्ठ्याहत्तर", "एकोणऐंशी", "ऐंशी",
+        "एक्याऐंशी", "ब्याऐंशी", "त्र्याऐंशी", "चौऱ्याऐंशी", "पंच्याऐंशी", "शहाऐंशी", "सत्त्याऐंशी", "अठ्ठ्याऐंशी", "एकोणनव्वद", "नव्वद",
+        "एक्याण्णव", "ब्याण्णव", "त्र्याण्णव", "चौऱ्याण्णव", "पंच्याण्णव", "शहाण्णव", "सत्त्याण्णव", "अठ्ठ्याण्णव", "नव्व्याण्णव"
+      ];
+
+      function convertBelowThousand(val) {
+        let str = "";
+        if (val >= 100) {
+          const h = Math.floor(val / 100);
+          str += units[h] + "शे ";
+          val %= 100;
+        }
+        if (val > 0) {
+          str += units[val] + " ";
+        }
+        return str.trim();
+      }
+
+      let words = "";
+      let remaining = num;
+
+      if (remaining >= 10000000) {
+        const cr = Math.floor(remaining / 10000000);
+        words += convertBelowThousand(cr) + " कोटी ";
+        remaining %= 10000000;
+      }
+      if (remaining >= 100000) {
+        const lk = Math.floor(remaining / 100000);
+        words += convertBelowThousand(lk) + " लाख ";
+        remaining %= 100000;
+      }
+      if (remaining >= 1000) {
+        const th = Math.floor(remaining / 1000);
+        words += convertBelowThousand(th) + " हजार ";
+        remaining %= 1000;
+      }
+      if (remaining > 0) {
+        words += convertBelowThousand(remaining);
+      }
+
+      return words.trim() + " रुपये मात्र";
+    }
+
+    function calculateFullYearLedger() {
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+
+      let currentHeadBalances = {};
+      let totalOpening = 0;
+      heads.forEach(h => {
+        const b = Number(h.openingBalance) || 0;
+        currentHeadBalances[h.id] = b;
+        totalOpening += b;
+      });
+
+      const monthResults = {};
+      let carriedTotalBalance = totalOpening;
+
+      FINANCIAL_MONTHS.forEach(m => {
+        const mNum = m.num;
+        const mData = (yData.months && yData.months[mNum]) ? yData.months[mNum] : { jama: [], kharch: [] };
+
+        const openingForThisMonth = carriedTotalBalance;
+        const headOpeningForThisMonth = { ...currentHeadBalances };
+
+        let monthTotalJama = 0;
+        (mData.jama || []).forEach(tx => {
+          const amt = Number(tx.amount) || 0;
+          monthTotalJama += amt;
+          if (tx.headId && currentHeadBalances[tx.headId] !== undefined) {
+            currentHeadBalances[tx.headId] += amt;
+          }
+        });
+
+        let monthTotalKharch = 0;
+        (mData.kharch || []).forEach(tx => {
+          const amt = Number(tx.amount) || 0;
+          monthTotalKharch += amt;
+          if (tx.headId && currentHeadBalances[tx.headId] !== undefined) {
+            currentHeadBalances[tx.headId] -= amt;
+          }
+        });
+
+        const closingForThisMonth = openingForThisMonth + monthTotalJama - monthTotalKharch;
+        carriedTotalBalance = closingForThisMonth;
+
+        monthResults[mNum] = {
+          openingBalance: openingForThisMonth,
+          totalJama: monthTotalJama,
+          totalKharch: monthTotalKharch,
+          closingBalance: closingForThisMonth,
+          headOpening: headOpeningForThisMonth,
+          headClosing: { ...currentHeadBalances }
+        };
+      });
+
+      const headAnnual = {};
+      heads.forEach(h => {
+        headAnnual[h.id] = {
+          head: h,
+          opening: Number(h.openingBalance) || 0,
+          jama: 0,
+          kharch: 0,
+          closing: currentHeadBalances[h.id] || 0
+        };
+      });
+
+      FINANCIAL_MONTHS.forEach(m => {
+        const mData = (yData.months && yData.months[m.num]) ? yData.months[m.num] : { jama: [], kharch: [] };
+        (mData.jama || []).forEach(tx => {
+          if (headAnnual[tx.headId]) {
+            headAnnual[tx.headId].jama += Number(tx.amount) || 0;
+          }
+        });
+        (mData.kharch || []).forEach(tx => {
+          if (headAnnual[tx.headId]) {
+            headAnnual[tx.headId].kharch += Number(tx.amount) || 0;
+          }
+        });
+      });
+
+      return {
+        initialTotalOpening: totalOpening,
+        finalTotalClosing: carriedTotalBalance,
+        monthResults: monthResults,
+        headAnnual: headAnnual
+      };
+    }
+
+    // UI RENDERERS
+    function renderHeaderInfo() {
+      const s = appData.schoolInfo;
+      document.getElementById("displaySchoolName").innerText = s.name || "शाळा सादील खर्च व कॅश बुक";
+      let sub = "";
+      if (s.center) sub += `केंद्र: ${s.center} | `;
+      if (s.taluka) sub += `ता: ${s.taluka} | `;
+      if (s.district) sub += `जि: ${s.district}`;
+      document.getElementById("displaySchoolSub").innerText = sub || "कॅश बुक व्यवस्थापन प्रणाली";
+
+      const accSelect = document.getElementById("selectAccount");
+      accSelect.innerHTML = "";
+      appData.accounts.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.innerText = a.name;
+        if (a.id === appData.currentAccountId) opt.selected = true;
+        accSelect.appendChild(opt);
+      });
+
+      const curAcc = getCurrentAccount();
+      const yrSelect = document.getElementById("selectYear");
+      yrSelect.innerHTML = "";
+      const yrs = Object.keys(curAcc.years);
+      if (yrs.length === 0) {
+        curAcc.years["2024-25"] = { heads: [], months: {} };
+        yrs.push("2024-25");
+      }
+      yrs.forEach(y => {
+        const opt = document.createElement("option");
+        opt.value = y;
+        opt.innerText = y;
+        if (y === appData.currentYear) opt.selected = true;
+        yrSelect.appendChild(opt);
+      });
+
+      document.querySelectorAll(".activeYearText").forEach(el => {
+        el.innerText = appData.currentYear;
+      });
+    }
+
+    function renderMonthsStrip() {
+      const strip = document.getElementById("monthsStrip");
+      strip.innerHTML = "";
+      FINANCIAL_MONTHS.forEach(m => {
+        const btn = document.createElement("button");
+        btn.className = `month-pill ${m.num === appData.currentMonth ? "active" : ""}`;
+        btn.innerText = m.name;
+        btn.onclick = () => selectMonth(m.num);
+        strip.appendChild(btn);
+      });
+    }
+
+    // TAB 1 RENDERER: 1 April Shillak
+    function renderHeadsTab() {
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+      const tbody = document.getElementById("headsTableBody");
+      tbody.innerHTML = "";
+
+      let tot = 0;
+      heads.forEach((h, idx) => {
+        const amt = Number(h.openingBalance) || 0;
+        tot += amt;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="text-center">${idx + 1}</td>
+          <td><strong>${h.name}</strong></td>
+          <td class="text-right hw-num jama-num">
+            <input type="number" value="${amt}" style="width: 110px; text-align: right; font-weight: bold;" onchange="updateHeadBalance('${h.id}', this.value)" /> /-
+          </td>
+          <td class="text-center">
+            <button class="btn btn-sm btn-outline" style="color: #2563eb; border-color: #93c5fd; padding: 4px 6px;" onclick="editHeadName('${h.id}')">✏️</button>
+            <button class="btn btn-sm btn-outline" style="color: #dc2626; border-color: #fca5a5; padding: 4px 6px;" onclick="deleteHead('${h.id}')">🗑️</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("headsTotalOpening").innerText = `₹ ${toMarathiNum(tot)} /-`;
+      document.getElementById("headsAkshariNote").innerHTML = `
+        <strong>अक्षरी नोंद:</strong> दि. 01/04 रोजी चालू आर्थिक वर्षाच्या सुरुवातीस एकूण मागील शिल्लक रु. <strong>${numberToMarathiWords(tot)}</strong> (₹ ${toMarathiNum(tot)}/-) मात्र चालू आर्थिक वर्षाच्या सुरुवातीस उपलब्ध आहे.
+      `;
+
+      const curAcc = getCurrentAccount();
+      document.getElementById("accEditName").value = curAcc.name || "";
+      document.getElementById("accEditBank").value = curAcc.bankName || "";
+      document.getElementById("accEditNumber").value = curAcc.accountNo || "";
+      document.getElementById("accEditIfsc").value = curAcc.ifsc || "";
+    }
+
+    // TAB 2 RENDERER: Monthly Data Entry
+    function renderDataEntryTab() {
+      const ledger = calculateFullYearLedger();
+      const mRes = ledger.monthResults[appData.currentMonth];
+      const mData = getMonthData(appData.currentMonth);
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+
+      document.getElementById("cardOpeningBal").innerText = `₹ ${toMarathiNum(mRes.openingBalance)} /-`;
+      document.getElementById("cardMonthJama").innerText = `₹ ${toMarathiNum(mRes.totalJama)} /-`;
+      document.getElementById("cardMonthKharch").innerText = `₹ ${toMarathiNum(mRes.totalKharch)} /-`;
+      document.getElementById("cardClosingBal").innerText = `₹ ${toMarathiNum(mRes.closingBalance)} /-`;
+
+      // Jama Table
+      const jamaTbody = document.getElementById("jamaTableBody");
+      jamaTbody.innerHTML = "";
+      if (!mData.jama || mData.jama.length === 0) {
+        jamaTbody.innerHTML = `<tr><td colspan="5" class="text-center" style="padding: 20px; color: #94a3b8;">चालू महिन्यात कोणतीही जमा नोंद नाही (निरंक)</td></tr>`;
+      } else {
+        mData.jama.forEach((tx) => {
+          const head = heads.find(h => h.id === tx.headId);
+          const headName = head ? head.name : "-";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="text-center"><strong>${formatDisplayDate(tx.date)}</strong></td>
+            <td><strong>${headName}</strong></td>
+            <td>${tx.details || "-"} ${tx.receiptNo ? `<br><small>पावती: ${tx.receiptNo}</small>` : ""} ${tx.chqNo ? `<br><small>चेक: ${tx.chqNo}</small>` : ""}</td>
+            <td class="text-right hw-num jama-num">${toMarathiNum(tx.amount)} /-</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline" style="color: #2563eb; border-color: #93c5fd; padding: 4px 6px;" onclick="editTransaction('jama', '${tx.id}')">✏️</button>
+              <button class="btn btn-sm btn-outline" style="color: #dc2626; border-color: #fca5a5; padding: 4px 6px;" onclick="deleteTransaction('jama', '${tx.id}')">🗑️</button>
+            </td>
+          `;
+          jamaTbody.appendChild(tr);
+        });
+      }
+      document.getElementById("jamaSubTotal").innerText = `₹ ${toMarathiNum(mRes.totalJama)} /-`;
+
+      // Kharch Table
+      const kharchTbody = document.getElementById("kharchTableBody");
+      kharchTbody.innerHTML = "";
+      if (!mData.kharch || mData.kharch.length === 0) {
+        kharchTbody.innerHTML = `<tr><td colspan="5" class="text-center" style="padding: 20px; color: #94a3b8;">चालू महिन्यात कोणताही खर्च नाही (निरंक)</td></tr>`;
+      } else {
+        mData.kharch.forEach((tx) => {
+          const head = heads.find(h => h.id === tx.headId);
+          const headName = head ? head.name : "-";
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="text-center"><strong>${formatDisplayDate(tx.date)}</strong></td>
+            <td><strong>${headName}</strong></td>
+            <td>
+              ${tx.details || "-"}
+              ${tx.billNo ? `<br><small>बिल क्र: ${tx.billNo}</small>` : ""}
+              ${tx.vendor ? `<br><small>पुरवठादार: ${tx.vendor}</small>` : ""}
+              ${tx.qty ? `<br><small>नग: ${tx.qty}</small>` : ""}
+            </td>
+            <td class="text-right hw-num kharch-num">${toMarathiNum(tx.amount)} /-</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline" style="color: #2563eb; border-color: #93c5fd; padding: 4px 6px;" onclick="editTransaction('kharch', '${tx.id}')">✏️</button>
+              <button class="btn btn-sm btn-outline" style="color: #dc2626; border-color: #fca5a5; padding: 4px 6px;" onclick="deleteTransaction('kharch', '${tx.id}')">🗑️</button>
+            </td>
+          `;
+          kharchTbody.appendChild(tr);
+        });
+      }
+      document.getElementById("kharchSubTotal").innerText = `₹ ${toMarathiNum(mRes.totalKharch)} /-`;
+
+      const headSummaries = [];
+      heads.forEach(h => {
+        const bal = mRes.headClosing[h.id] || 0;
+        headSummaries.push(`<strong>${h.name}:</strong> ₹ ${toMarathiNum(bal)}`);
+      });
+      document.getElementById("monthHeadwiseSummary").innerHTML = headSummaries.join(" | ") + ` = <strong>एकूण: ₹ ${toMarathiNum(mRes.closingBalance)} /-</strong>`;
+
+      const mObj = FINANCIAL_MONTHS.find(m => m.num === appData.currentMonth);
+      const akshariWords = numberToMarathiWords(mRes.closingBalance);
+      document.getElementById("monthAkshariNote").innerHTML = `
+        <strong>अक्षरी नोंद:</strong> ${mObj.name} महिना अखेर खाते पुस्तकी शिल्लक रु. <strong>${akshariWords}</strong> पुढील व्यवहारासाठी शिल्लक आहेत.
+      `;
+    }
+
+    // TAB 3: Register View
+    function renderRegisterView() {
+      const container = document.getElementById("registerSheetsContainer");
+      container.innerHTML = "";
+      const filter = document.getElementById("regFilterMonth").value;
+      const ledger = calculateFullYearLedger();
+      const curAcc = getCurrentAccount();
+      const s = appData.schoolInfo;
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+
+      if (filter === "all" || filter === "opening") {
+        const openDiv = document.createElement("div");
+        openDiv.className = "cashbook-sheet";
+        let rowsHtml = "";
+        heads.forEach((h, idx) => {
+          rowsHtml += `
+            <tr>
+              <td class="text-center">${idx + 1}</td>
+              <td>${h.name}</td>
+              <td class="text-right reg-hw">${toMarathiNum(h.openingBalance)} /-</td>
+            </tr>
+          `;
+        });
+
+        openDiv.innerHTML = `
+          ${getOfficialPrintHeader("1ले पान : सुरुवातीची शिल्लक हेडनिहाय गोषवारा (दि. 01/04 रोजी)")}
+          <table class="reg-table" style="max-width: 800px; margin: 0 auto;">
+            <thead>
+              <tr style="background: #e2e8f0;">
+                <th style="width: 12%;">अ. क्र.</th>
+                <th style="width: 58%;">खात्याचे नाव (Head of Account)</th>
+                <th style="width: 30%;">सुरुवातीची शिल्लक रक्कम (₹)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+            <tfoot>
+              <tr style="background: #edf2f7; font-weight: bold; font-size: 1.05rem;">
+                <td colspan="2" class="text-center">एकूण सुरुवातीची शिल्लक (Opening Total):</td>
+                <td class="text-right reg-hw" style="color: #1a365d;">₹ ${toMarathiNum(ledger.initialTotalOpening)} /-</td>
+              </tr>
+            </tfoot>
+          </table>
+          <div class="reg-akshari-box" style="max-width: 800px; margin: 18px auto 0;">
+            दि. 01/04 रोजी चालू आर्थिक वर्षाच्या सुरुवातीस मागील शिल्लक रु. <strong>${numberToMarathiWords(ledger.initialTotalOpening)}</strong> (₹ ${toMarathiNum(ledger.initialTotalOpening)}/-) मात्र शिल्लक आहे.
+          </div>
+          ${getPrintSignatures()}
+        `;
+        container.appendChild(openDiv);
+      }
+
+      FINANCIAL_MONTHS.forEach(m => {
+        if (filter !== "all" && filter !== String(m.num)) return;
+        const sheetHtml = makeDualLedgerMonthSheet(m.num, ledger, heads, curAcc, yData, s);
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = sheetHtml;
+        container.appendChild(tempDiv.firstElementChild);
+      });
+
+      if (filter === "all" || filter === "final") {
+        const finalDiv = document.createElement("div");
+        finalDiv.className = "cashbook-sheet";
+
+        let finalRows = "";
+        let totOp = 0, totJ = 0, totK = 0, totCl = 0;
+        heads.forEach((h, idx) => {
+          const stats = ledger.headAnnual[h.id];
+          totOp += stats.opening;
+          totJ += stats.jama;
+          totK += stats.kharch;
+          totCl += stats.closing;
+          finalRows += `
+            <tr>
+              <td class="text-center">${idx + 1}</td>
+              <td><strong>${h.name}</strong></td>
+              <td class="text-right reg-hw">${toMarathiNum(stats.opening)} /-</td>
+              <td class="text-right reg-hw" style="color: #059669;">${toMarathiNum(stats.jama)} /-</td>
+              <td class="text-right reg-hw" style="color: #dc2626;">${toMarathiNum(stats.kharch)} /-</td>
+              <td class="text-right reg-hw">${toMarathiNum(stats.closing)} /-</td>
+            </tr>
+          `;
+        });
+
+        finalDiv.innerHTML = `
+          ${getOfficialPrintHeader("शेवटचे पान : वार्षिक अंतिम हेडनिहाय ताळेबंद (Final Balance Sheet - 31 मार्च अखेर)")}
+          <table class="reg-table" style="max-width: 950px; margin: 0 auto;">
+            <thead>
+              <tr style="background: #e2e8f0;">
+                <th style="width: 8%;">अ. क्र.</th>
+                <th style="width: 32%;">खात्याचे नाव (Head of Account)</th>
+                <th style="width: 15%;">सुरुवातीची शिल्लक<br><small>(01/04 रोजी)</small></th>
+                <th style="width: 15%;">वर्षभरातील जमा<br><small>(Total Receipts)</small></th>
+                <th style="width: 15%;">वर्षभरातील खर्च<br><small>(Total Expenses)</small></th>
+                <th style="width: 15%;">अंतिम शिल्लक<br><small>(31/03 अखेर)</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${finalRows}
+            </tbody>
+            <tfoot>
+              <tr style="background: #edf2f7; font-weight: bold; font-size: 1.05rem;">
+                <td colspan="2" class="text-center">एकूण (Grand Total)</td>
+                <td class="text-right reg-hw" style="color: #1a365d;">₹ ${toMarathiNum(totOp)} /-</td>
+                <td class="text-right reg-hw" style="color: #059669;">₹ ${toMarathiNum(totJ)} /-</td>
+                <td class="text-right reg-hw" style="color: #dc2626;">₹ ${toMarathiNum(totK)} /-</td>
+                <td class="text-right reg-hw" style="color: #1a365d;">₹ ${toMarathiNum(totCl)} /-</td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div class="reg-akshari-box" style="max-width: 950px; margin: 18px auto 0;">
+            सदर कॅश बुक व सादील खर्च ताळेबंद तपासला असून, 31 मार्च रोजी अखेर अंतिम पुस्तकी शिल्लक रु. <strong>${numberToMarathiWords(totCl)}</strong> (₹ ${toMarathiNum(totCl)}/-) अचूक जुळत आहे.
+          </div>
+          ${getPrintSignatures()}
+        `;
+        container.appendChild(finalDiv);
+      }
+    }
+
+    // TAB 4: Annual Balance Tab
+    function renderAnnualTab() {
+      const ledger = calculateFullYearLedger();
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+      const tbody = document.getElementById("annualSheetBody");
+      tbody.innerHTML = "";
+
+      let totOp = 0, totJ = 0, totK = 0, totCl = 0;
+      heads.forEach((h, idx) => {
+        const stats = ledger.headAnnual[h.id];
+        totOp += stats.opening;
+        totJ += stats.jama;
+        totK += stats.kharch;
+        totCl += stats.closing;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="text-center">${idx + 1}</td>
+          <td><strong>${h.name}</strong></td>
+          <td class="text-right hw-num jama-num">${toMarathiNum(stats.opening)} /-</td>
+          <td class="text-right hw-num jama-num">${toMarathiNum(stats.jama)} /-</td>
+          <td class="text-right hw-num kharch-num">${toMarathiNum(stats.kharch)} /-</td>
+          <td class="text-right hw-num jama-num">${toMarathiNum(stats.closing)} /-</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById("annTotOpening").innerText = `₹ ${toMarathiNum(totOp)} /-`;
+      document.getElementById("annTotJama").innerText = `₹ ${toMarathiNum(totJ)} /-`;
+      document.getElementById("annTotKharch").innerText = `₹ ${toMarathiNum(totK)} /-`;
+      document.getElementById("annTotClosing").innerText = `₹ ${toMarathiNum(totCl)} /-`;
+
+      document.getElementById("annualAkshariNote").innerHTML = `
+        <strong>अक्षरी नोंद:</strong> 31 मार्च अखेर एकूण अंतिम शिल्लक रु. <strong>${numberToMarathiWords(totCl)}</strong> (₹ ${toMarathiNum(totCl)}/-) मात्र आहे.
+      `;
+    }
+
+    // TAB 5: Backup Tab
+    function renderBackupTab() {
+      const tbody = document.getElementById("allAccountsListBody");
+      tbody.innerHTML = "";
+      appData.accounts.forEach(a => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${a.name}</strong> ${a.id === appData.currentAccountId ? `<span style="background: #dbeafe; color: #1e40af; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem;">सक्रिय</span>` : ""}</td>
+          <td>${a.bankName || "-"}</td>
+          <td>${a.accountNo || "-"}</td>
+          <td>${a.ifsc || "-"}</td>
+          <td class="text-center">
+            ${appData.accounts.length > 1 ? `<button class="btn btn-sm btn-danger" onclick="deleteAccount('${a.id}')">हटवा</button>` : `<small style="color: #94a3b8;">मुख्य खाते</small>`}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function refreshCurrentView() {
+      renderHeaderInfo();
+      renderMonthsStrip();
+      renderHeadsTab();
+      renderDataEntryTab();
+      renderRegisterView();
+      renderAnnualTab();
+      renderBackupTab();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+      const targetPane = document.getElementById(`tab-${tabId}`);
+      if (targetPane) targetPane.classList.add("active");
+
+      const tabs = ["heads", "entry", "register", "annual", "backup"];
+      const idx = tabs.indexOf(tabId);
+      if (idx !== -1) {
+        const activeBtn = document.querySelectorAll(".tab-btn")[idx];
+        if (activeBtn) {
+          activeBtn.classList.add("active");
+          try {
+            activeBtn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+          } catch (e) {}
+        }
+      }
+
+      // Show/Hide mobile quick action bar only in Tab 2 (Data Entry)
+      const mobBar = document.getElementById("mobileQuickBar");
+      if (mobBar) {
+        if (tabId === "entry" && window.innerWidth <= 768) {
+          mobBar.classList.add("show-bar");
+        } else {
+          mobBar.classList.remove("show-bar");
+        }
+      }
+
+      if (tabId === "heads") {
+        renderHeadsTab();
+      } else if (tabId === "entry") {
+        renderDataEntryTab();
+      } else if (tabId === "register") {
+        renderRegisterView();
+      } else if (tabId === "annual") {
+        renderAnnualTab();
+      }
+    }
+
+    function selectMonth(mNum) {
+      appData.currentMonth = mNum;
+      renderMonthsStrip();
+      renderDataEntryTab();
+    }
+
+    function changeAccount(accId) {
+      appData.currentAccountId = accId;
+      saveData();
+      refreshCurrentView();
+      showToast("बँक खाते बदलले!");
+    }
+
+    function changeYear(yr) {
+      appData.currentYear = yr;
+      saveData();
+      refreshCurrentView();
+      showToast("आर्थिक वर्ष बदलले!");
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add("open");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    // TRANSACTION MODAL (Add / Edit)
+    function openTransactionModal(type, editId = null) {
+      document.getElementById("txType").value = type;
+      document.getElementById("txEditId").value = editId || "";
+
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+      const headSelect = document.getElementById("txHead");
+      headSelect.innerHTML = "";
+      heads.forEach(h => {
+        const opt = document.createElement("option");
+        opt.value = h.id;
+        opt.innerText = h.name;
+        headSelect.appendChild(opt);
+      });
+
+      if (type === "jama") {
+        document.getElementById("txModalTitle").innerText = editId ? "✏️ जमा नोंद संपादित करा" : "➕ नवीन जमा नोंद";
+        document.getElementById("jamaOnlyFields").style.display = "block";
+        document.getElementById("kharchOnlyFields").style.display = "none";
+      } else {
+        document.getElementById("txModalTitle").innerText = editId ? "✏️ खर्च नोंद संपादित करा" : "➕ नवीन खर्च नोंद";
+        document.getElementById("jamaOnlyFields").style.display = "none";
+        document.getElementById("kharchOnlyFields").style.display = "block";
+      }
+
+      if (editId) {
+        const mData = getMonthData(appData.currentMonth);
+        const list = type === "jama" ? mData.jama : mData.kharch;
+        const tx = list.find(t => t.id === editId);
+        if (tx) {
+          document.getElementById("txDate").value = tx.date || "";
+          document.getElementById("txAmount").value = tx.amount || "";
+          document.getElementById("txHead").value = tx.headId || (heads[0] ? heads[0].id : "");
+          document.getElementById("txDetails").value = tx.details || "";
+          if (type === "jama") {
+            document.getElementById("txReceiptNo").value = tx.receiptNo || "";
+            document.getElementById("txChqNo").value = tx.chqNo || "";
+          } else {
+            document.getElementById("txBillNo").value = tx.billNo || "";
+            document.getElementById("txVendor").value = tx.vendor || "";
+            document.getElementById("txQty").value = tx.qty || "";
+            document.getElementById("txRemarks").value = tx.remarks || "";
+          }
+        }
+      } else {
+        const yNum = appData.currentMonth >= 4 ? "2024" : "2025";
+        const mStr = String(appData.currentMonth).padStart(2, "0");
+        document.getElementById("txDate").value = `${yNum}-${mStr}-01`;
+        document.getElementById("txAmount").value = "";
+        document.getElementById("txDetails").value = "";
+        document.getElementById("txReceiptNo").value = "";
+        document.getElementById("txChqNo").value = "";
+        document.getElementById("txBillNo").value = "";
+        document.getElementById("txVendor").value = "";
+        document.getElementById("txQty").value = "";
+        document.getElementById("txRemarks").value = "";
+      }
+
+      openModal("txModal");
+    }
+
+    function saveTransaction() {
+      const type = document.getElementById("txType").value;
+      const editId = document.getElementById("txEditId").value;
+      const date = document.getElementById("txDate").value;
+      const amount = parseFloat(document.getElementById("txAmount").value);
+      const headId = document.getElementById("txHead").value;
+      const details = document.getElementById("txDetails").value.trim();
+
+      if (!date || isNaN(amount) || amount <= 0 || !details) {
+        alert("कृपया दिनांक, रक्कम आणि तपशील अचूक भरा!");
+        return;
+      }
+
+      const mData = getMonthData(appData.currentMonth);
+      const list = type === "jama" ? mData.jama : mData.kharch;
+
+      if (editId) {
+        const tx = list.find(t => t.id === editId);
+        if (tx) {
+          tx.date = date;
+          tx.amount = amount;
+          tx.headId = headId;
+          tx.details = details;
+          if (type === "jama") {
+            tx.receiptNo = document.getElementById("txReceiptNo").value.trim();
+            tx.chqNo = document.getElementById("txChqNo").value.trim();
+          } else {
+            tx.billNo = document.getElementById("txBillNo").value.trim();
+            tx.vendor = document.getElementById("txVendor").value.trim();
+            tx.qty = document.getElementById("txQty").value.trim();
+            tx.remarks = document.getElementById("txRemarks").value.trim();
+          }
+        }
+      } else {
+        const newTx = {
+          id: "tx_" + Date.now(),
+          date: date,
+          amount: amount,
+          headId: headId,
+          details: details
+        };
+        if (type === "jama") {
+          newTx.receiptNo = document.getElementById("txReceiptNo").value.trim();
+          newTx.chqNo = document.getElementById("txChqNo").value.trim();
+        } else {
+          newTx.billNo = document.getElementById("txBillNo").value.trim();
+          newTx.vendor = document.getElementById("txVendor").value.trim();
+          newTx.qty = document.getElementById("txQty").value.trim();
+          newTx.remarks = document.getElementById("txRemarks").value.trim();
+        }
+        list.push(newTx);
+      }
+
+      saveData();
+      closeModal("txModal");
+      renderDataEntryTab();
+      showToast("नोंद यशस्वीरीत्या सेव्ह झाली!");
+    }
+
+    function editTransaction(type, id) {
+      openTransactionModal(type, id);
+    }
+
+    function deleteTransaction(type, id) {
+      if (!confirm("तुम्हाला ही नोंद खरोखर हटवायची आहे का?")) return;
+      const mData = getMonthData(appData.currentMonth);
+      if (type === "jama") {
+        mData.jama = mData.jama.filter(t => t.id !== id);
+      } else {
+        mData.kharch = mData.kharch.filter(t => t.id !== id);
+      }
+      saveData();
+      renderDataEntryTab();
+      showToast("नोंद हटवण्यात आली!");
+    }
+
+    function openNewHeadModal() {
+      document.getElementById("editHeadId").value = "";
+      document.getElementById("headModalTitle").innerText = "➕ नवीन उप-हेड जोडा";
+      document.getElementById("newHeadName").value = "";
+      document.getElementById("newHeadBalance").value = "0";
+      openModal("headModal");
+    }
+
+    function editHeadName(headId) {
+      const yData = getCurrentYearData();
+      const h = yData.heads.find(x => x.id === headId);
+      if (!h) return;
+      document.getElementById("editHeadId").value = headId;
+      document.getElementById("headModalTitle").innerText = "✏️ हेडचे नाव बदला";
+      document.getElementById("newHeadName").value = h.name;
+      document.getElementById("newHeadBalance").value = h.openingBalance || 0;
+      openModal("headModal");
+    }
+
+    function saveHead() {
+      const editId = document.getElementById("editHeadId").value;
+      const name = document.getElementById("newHeadName").value.trim();
+      const bal = parseFloat(document.getElementById("newHeadBalance").value) || 0;
+
+      if (!name) {
+        alert("कृपया हेडचे नाव भरा!");
+        return;
+      }
+
+      const yData = getCurrentYearData();
+      if (editId) {
+        const h = yData.heads.find(x => x.id === editId);
+        if (h) {
+          h.name = name;
+          h.openingBalance = bal;
+        }
+      } else {
+        yData.heads.push({
+          id: "h_" + Date.now(),
+          name: name,
+          openingBalance: bal
+        });
+      }
+
+      saveData();
+      closeModal("headModal");
+      refreshCurrentView();
+      showToast("हेड सेव्ह झाले!");
+    }
+
+    function updateHeadBalance(headId, val) {
+      const yData = getCurrentYearData();
+      const h = yData.heads.find(x => x.id === headId);
+      if (h) {
+        h.openingBalance = parseFloat(val) || 0;
+        saveData();
+        refreshCurrentView();
+        showToast("सुरुवातीची शिल्लक अपडेट झाली!");
+      }
+    }
+
+    function deleteHead(headId) {
+      if (!confirm("हे हेड हटवायचे आहे का? यामुळे या हेडच्या सर्व नोंदींचा ताळेबंद बदलेल.")) return;
+      const yData = getCurrentYearData();
+      yData.heads = yData.heads.filter(x => x.id !== headId);
+      saveData();
+      refreshCurrentView();
+      showToast("हेड हटवण्यात आले!");
+    }
+
+    function saveAccountDetails() {
+      const curAcc = getCurrentAccount();
+      curAcc.name = document.getElementById("accEditName").value.trim() || curAcc.name;
+      curAcc.bankName = document.getElementById("accEditBank").value.trim();
+      curAcc.accountNo = document.getElementById("accEditNumber").value.trim();
+      curAcc.ifsc = document.getElementById("accEditIfsc").value.trim();
+      saveData();
+      refreshCurrentView();
+      showToast("बँक तपशील जतन झाले!");
+    }
+
+    function openNewAccountModal() {
+      document.getElementById("newAccName").value = "";
+      document.getElementById("newAccBank").value = "";
+      document.getElementById("newAccNumber").value = "";
+      document.getElementById("newAccIfsc").value = "";
+      openModal("accountModal");
+    }
+
+    function saveNewAccount() {
+      const name = document.getElementById("newAccName").value.trim();
+      if (!name) {
+        alert("कृपया खात्याचे नाव टाका!");
+        return;
+      }
+      const newAcc = {
+        id: "acc_" + Date.now(),
+        name: name,
+        bankName: document.getElementById("newAccBank").value.trim(),
+        accountNo: document.getElementById("newAccNumber").value.trim(),
+        ifsc: document.getElementById("newAccIfsc").value.trim(),
+        years: {
+          [appData.currentYear]: {
+            heads: [
+              { id: "h_" + Date.now(), name: "सामान्य खर्च निधी", openingBalance: 0 }
+            ],
+            months: {}
+          }
+        }
+      };
+      appData.accounts.push(newAcc);
+      appData.currentAccountId = newAcc.id;
+      saveData();
+      closeModal("accountModal");
+      refreshCurrentView();
+      showToast("नवीन बँक खाते तयार झाले!");
+    }
+
+    function deleteAccount(accId) {
+      if (appData.accounts.length <= 1) {
+        alert("किमान एक बँक खाते असणे आवश्यक आहे!");
+        return;
+      }
+      if (!confirm("हे बँक खाते आणि त्यामधील सर्व वर्षांचा डेटा कायमचा हटवायचा आहे का?")) return;
+      appData.accounts = appData.accounts.filter(a => a.id !== accId);
+      appData.currentAccountId = appData.accounts[0].id;
+      saveData();
+      refreshCurrentView();
+      showToast("खाते हटवले!");
+    }
+
+    function openNewYearModal() {
+      document.getElementById("newYearInput").value = "";
+      openModal("yearModal");
+    }
+
+    function saveNewYear() {
+      const yr = document.getElementById("newYearInput").value.trim();
+      if (!yr) {
+        alert("कृपया आर्थिक वर्ष टाका!");
+        return;
+      }
+      const shouldCarry = document.getElementById("carryForwardCheck").checked;
+      const curAcc = getCurrentAccount();
+
+      if (!curAcc.years[yr]) {
+        let newHeads = [];
+        if (shouldCarry && curAcc.years[appData.currentYear]) {
+          const ledger = calculateFullYearLedger();
+          const prevHeads = curAcc.years[appData.currentYear].heads || [];
+          newHeads = prevHeads.map(h => ({
+            id: h.id,
+            name: h.name,
+            openingBalance: ledger.headAnnual[h.id] ? ledger.headAnnual[h.id].closing : 0
+          }));
+        }
+        curAcc.years[yr] = {
+          heads: newHeads,
+          months: {}
+        };
+      }
+
+      appData.currentYear = yr;
+      saveData();
+      closeModal("yearModal");
+      refreshCurrentView();
+      showToast("नवीन वर्ष जोडले व लोड झाले!");
+    }
+
+    function openSchoolModal() {
+      const s = appData.schoolInfo || {};
+      document.getElementById("schoolNameInput").value = s.name || "";
+      document.getElementById("schoolCenterInput").value = s.center || "";
+      document.getElementById("schoolTalukaInput").value = s.taluka || "";
+      document.getElementById("schoolDistrictInput").value = s.district || "";
+      document.getElementById("schoolUdiseInput").value = s.udise || "";
+      document.getElementById("schoolHmInput").value = s.headmaster || "";
+      openModal("schoolModal");
+    }
+
+    function saveSchoolInfo() {
+      appData.schoolInfo = {
+        name: document.getElementById("schoolNameInput").value.trim(),
+        center: document.getElementById("schoolCenterInput").value.trim(),
+        taluka: document.getElementById("schoolTalukaInput").value.trim(),
+        district: document.getElementById("schoolDistrictInput").value.trim(),
+        udise: document.getElementById("schoolUdiseInput").value.trim(),
+        headmaster: document.getElementById("schoolHmInput").value.trim()
+      };
+      saveData();
+      closeModal("schoolModal");
+      refreshCurrentView();
+      showToast("शाळेची माहिती सेव्ह झाली!");
+    }
+
+    function exportDataToFile() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `School_Cashbook_Backup_${appData.currentYear}_${Date.now()}.json`);
+      dlAnchor.click();
+      showToast("बॅकअप फाईल डाऊनलोड झाली!");
+    }
+
+    function importDataFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && parsed.accounts) {
+            appData = parsed;
+            saveData();
+            refreshCurrentView();
+            showToast("बॅकअप यशस्वीरीत्या लोड झाला!");
+          } else {
+            alert("अवैध बॅकअप फाईल!");
+          }
+        } catch (err) {
+          alert("फाईल वाचताना अडचण आली: " + err);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetToSampleData() {
+      if (!confirm("सर्व डेटा पूर्ववत मूळ नमुना डेटावर आणायचा आहे का? चालू सर्व बदल निघून जातील!")) return;
+      appData = getDefaultData();
+      saveData();
+      refreshCurrentView();
+      showToast("मूळ डेटा रिसेट केला गेला!");
+    }
+
+    // ==================== DEDICATED PRINT SYSTEM (समोरासमोर / VERTICAL DUAL LEDGER) ====================
+
+    function getOfficialPrintHeader(docTitle) {
+      const s = appData.schoolInfo;
+      const curAcc = getCurrentAccount();
+      return `
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 12px;">
+          <h2 style="font-size: 1.35rem; margin-bottom: 4px; color: #000;">${s.name || "शाळा सादील खर्च व कॅश बुक"}</h2>
+          <div style="font-size: 1.1rem; font-weight: bold; color: #1e3a8a;">${curAcc.name} (आर्थिक वर्ष: ${appData.currentYear})</div>
+          <div style="font-size: 0.88rem; color: #334155; margin-top: 3px;">
+            ${s.center ? `केंद्र: ${s.center} | ` : ""}${s.taluka ? `तालुका: ${s.taluka} | ` : ""}${s.district ? `जिल्हा: ${s.district} | ` : ""}
+            ${curAcc.bankName ? `बँक: ${curAcc.bankName} ` : ""}${curAcc.accountNo ? `(खाते क्र: ${curAcc.accountNo})` : ""}
+          </div>
+          <div style="font-size: 1.15rem; font-weight: bold; border-top: 1px dashed #000; margin-top: 6px; padding-top: 5px; color: #000;">
+            ${docTitle}
+          </div>
+        </div>
+      `;
+    }
+
+    function getPrintSignatures() {
+      return `
+        <div style="display: flex; justify-content: space-between; margin-top: 35px; padding: 0 30px; font-weight: bold; font-size: 0.95rem; color: #000;">
+          <div>लिपीक / वर्गशिक्षक</div>
+          <div>मुख्याध्यापक सही व शिक्का</div>
+        </div>
+      `;
+    }
+
+    function makeDualLedgerMonthSheet(mNum, ledger, heads, curAcc, yData, s) {
+      const mObj = FINANCIAL_MONTHS.find(m => m.num === mNum);
+      const mRes = ledger.monthResults[mNum];
+      const mData = (yData.months && yData.months[mNum]) ? yData.months[mNum] : { jama: [], kharch: [] };
+
+      // JAMA ROWS
+      let jamaRows = `
+        <tr style="background: #f8fafc;">
+          <td colspan="2" style="border: 1px solid #000; padding: 5px;">मागील शिल्लक (Opening Balance)</td>
+          <td style="border: 1px solid #000; padding: 5px; text-align: right; font-family: var(--hw-font); font-size: 1.1rem; font-weight: bold;">
+            ${toMarathiNum(mRes.openingBalance)} /-
+          </td>
+        </tr>
+      `;
+      if (mData.jama && mData.jama.length > 0) {
+        mData.jama.forEach(tx => {
+          const h = heads.find(x => x.id === tx.headId);
+          jamaRows += `
+            <tr>
+              <td style="text-align: center; border: 1px solid #000; padding: 5px; font-weight: bold;">
+                ${formatDisplayDate(tx.date)}
+              </td>
+              <td style="border: 1px solid #000; padding: 5px; line-height: 1.3;">
+                <strong>${h ? h.name : ""}</strong>
+                <div>${tx.details || ""}</div>
+                ${tx.receiptNo ? `<small style="color: #475569;">पावती क्र: ${tx.receiptNo}</small> ` : ""}
+                ${tx.chqNo ? `<small style="color: #475569;">चेक: ${tx.chqNo}</small>` : ""}
+              </td>
+              <td style="text-align: right; border: 1px solid #000; padding: 5px; font-family: var(--hw-font); font-size: 1.1rem; font-weight: bold; color: var(--ink-blue);">
+                ${toMarathiNum(tx.amount)} /-
+              </td>
+            </tr>
+          `;
+        });
+      }
+      jamaRows += `
+        <tr style="font-weight: bold; background: #f8fafc;">
+          <td colspan="2" style="border: 1px solid #000; padding: 5px;">चालू महिना जमा:</td>
+          <td style="border: 1px solid #000; padding: 5px; text-align: right; font-family: var(--hw-font); font-size: 1.1rem; color: #065f46;">
+            ${toMarathiNum(mRes.totalJama)} /-
+          </td>
+        </tr>
+      `;
+
+      // KHARCH ROWS
+      let kharchRows = "";
+      if (!mData.kharch || mData.kharch.length === 0) {
+        kharchRows = `
+          <tr>
+            <td colspan="3" style="text-align: center; padding: 35px 10px; border: 1px solid #000; color: #555;">
+              चालू महिना खर्च नाही (निरंक) 0/-
+            </td>
+          </tr>
+        `;
+      } else {
+        mData.kharch.forEach(tx => {
+          const h = heads.find(x => x.id === tx.headId);
+          kharchRows += `
+            <tr>
+              <td style="text-align: center; border: 1px solid #000; padding: 5px; font-weight: bold;">
+                ${formatDisplayDate(tx.date)}
+              </td>
+              <td style="border: 1px solid #000; padding: 5px; line-height: 1.3;">
+                <strong>${h ? h.name : ""}</strong>
+                <div>${tx.details || ""}</div>
+                ${tx.billNo ? `<small style="color: #475569;">बिल क्र: ${tx.billNo}</small> ` : ""}
+                ${tx.vendor ? `<small style="color: #475569;">पुरवठादार: ${tx.vendor}</small> ` : ""}
+                ${tx.qty ? `<small style="color: #475569;">नग: ${tx.qty}</small>` : ""}
+              </td>
+              <td style="text-align: right; border: 1px solid #000; padding: 5px; font-family: var(--hw-font); font-size: 1.1rem; font-weight: bold; color: var(--ink-red);">
+                ${toMarathiNum(tx.amount)} /-
+              </td>
+            </tr>
+          `;
+        });
+      }
+      kharchRows += `
+        <tr style="font-weight: bold; background: #f8fafc;">
+          <td colspan="2" style="border: 1px solid #000; padding: 5px;">चालू महिना एकूण खर्च:</td>
+          <td style="border: 1px solid #000; padding: 5px; text-align: right; font-family: var(--hw-font); font-size: 1.1rem; color: #991b1b;">
+            ${toMarathiNum(mRes.totalKharch)} /-
+          </td>
+        </tr>
+      `;
+
+      const headSummaries = [];
+      heads.forEach(h => {
+        const bal = mRes.headClosing[h.id] || 0;
+        headSummaries.push(`<strong>${h.name}:</strong> ₹${toMarathiNum(bal)}`);
+      });
+
+      return `
+        <div class="cashbook-sheet" style="padding: 10mm 10mm;">
+          ${getOfficialPrintHeader(`${mObj.title} - कॅश बुक (सादील खर्च)`)}
+
+          <!-- DUAL LEDGER SAMORASAMOR (दोन उभे कॉलम समोरासमोर) -->
+          <div class="print-dual-ledger" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <!-- JAMA (डावी बाजू समोरासमोर) -->
+            <div style="border: 1.5px solid #000; display: flex; flex-direction: column;">
+              <div style="background: #e0f2fe; color: #0369a1; text-align: center; font-weight: bold; padding: 6px; border-bottom: 1.5px solid #000; font-size: 0.95rem;">
+                : जमा बाजू (Receipts) :
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; flex: 1;">
+                <thead>
+                  <tr style="background: #f1f5f9;">
+                    <th style="border: 1px solid #000; padding: 5px; width: 22%; text-align: center;">दिनांक</th>
+                    <th style="border: 1px solid #000; padding: 5px; width: 52%; text-align: left;">जमा तपशील व हेड</th>
+                    <th style="border: 1px solid #000; padding: 5px; width: 26%; text-align: right;">रक्कम (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${jamaRows}
+                </tbody>
+                <tfoot>
+                  <tr style="background: #e2e8f0; font-weight: bold;">
+                    <td colspan="2" style="border: 1px solid #000; padding: 6px; text-align: center;">एकूण जमा (मागील + आजची):</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: right; font-family: var(--hw-font); font-size: 1.15rem;">
+                      ₹ ${toMarathiNum(mRes.openingBalance + mRes.totalJama)} /-
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            <!-- KHARCH (उजवी बाजू समोरासमोर) -->
+            <div style="border: 1.5px solid #000; display: flex; flex-direction: column;">
+              <div style="background: #ffedd5; color: #c2410c; text-align: center; font-weight: bold; padding: 6px; border-bottom: 1.5px solid #000; font-size: 0.95rem;">
+                : खर्च बाजू (Payments) :
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; flex: 1;">
+                <thead>
+                  <tr style="background: #f1f5f9;">
+                    <th style="border: 1px solid #000; padding: 5px; width: 22%; text-align: center;">दिनांक</th>
+                    <th style="border: 1px solid #000; padding: 5px; width: 52%; text-align: left;">खर्च तपशील / बिल क्र.</th>
+                    <th style="border: 1px solid #000; padding: 5px; width: 26%; text-align: right;">रक्कम (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${kharchRows}
+                </tbody>
+                <tfoot>
+                  <tr style="background: #e2e8f0; font-weight: bold;">
+                    <td colspan="2" style="border: 1px solid #000; padding: 6px; text-align: center;">पुढील व्यवहारासाठी शिल्लक:</td>
+                    <td style="border: 1px solid #000; padding: 6px; text-align: right; font-family: var(--hw-font); font-size: 1.15rem;">
+                      ₹ ${toMarathiNum(mRes.closingBalance)} /-
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- HEADWISE SUMMARY -->
+          <div style="margin-top: 10px; padding: 8px 10px; background: #f8fafc; border: 1px dashed #000; font-size: 0.88rem; line-height: 1.5;">
+            <strong>पुढील हेडनिहाय शिल्लक:</strong> ${headSummaries.join(" | ")} = <strong>₹ ${toMarathiNum(mRes.closingBalance)}/-</strong>
+          </div>
+
+          <!-- AKSHARI NOTE -->
+          <div style="font-family: var(--hw-font); font-size: 1.05rem; color: #0f2e59; margin-top: 8px; padding: 8px 12px; background: #eff6ff; border-left: 4px solid #2563eb; line-height: 1.4;">
+            आज ${mObj.name} महिना अखेर खाते पुस्तकी शिल्लक रु. <strong>${numberToMarathiWords(mRes.closingBalance)}</strong> मात्र पुढील व्यवहारासाठी शिल्लक आहेत.
+          </div>
+
+          <!-- SIGNATURES -->
+          <div style="display: flex; justify-content: space-between; margin-top: 25px; padding: 0 20px; font-weight: bold; font-size: 0.95rem;">
+            <div>लिपीक / वर्गशिक्षक</div>
+            <div>मुख्याध्यापक सही व शिक्का</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Universal Print Dispatcher
+    function printSection(mode) {
+      const printBox = document.getElementById("printContainer");
+      printBox.innerHTML = "";
+
+      const ledger = calculateFullYearLedger();
+      const curAcc = getCurrentAccount();
+      const yData = getCurrentYearData();
+      const heads = yData.heads || [];
+      const s = appData.schoolInfo;
+
+      // 1. PRINT TAB 1: 1 April Opening Statement
+      if (mode === "heads") {
+        let rows = "";
+        heads.forEach((h, idx) => {
+          rows += `
+            <tr>
+              <td style="text-align: center; border: 1px solid #000; padding: 8px;">${idx + 1}</td>
+              <td style="border: 1px solid #000; padding: 8px; font-weight: bold;">${h.name}</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 8px; font-family: var(--hw-font); font-size: 1.2rem; font-weight: bold;">
+                ${toMarathiNum(h.openingBalance)} /-
+              </td>
+            </tr>
+          `;
+        });
+
+        printBox.innerHTML = `
+          <div class="cashbook-sheet" style="padding: 15mm 15mm;">
+            ${getOfficialPrintHeader("1ले पान : सुरुवातीची शिल्लक हेडनिहाय गोषवारा (दि. 01/04 रोजी)")}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+              <thead>
+                <tr style="background: #e2e8f0;">
+                  <th style="border: 1px solid #000; padding: 10px; width: 10%; text-align: center;">अ. क्र.</th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 60%; text-align: left;">खात्याचे नाव / उप-हेड (Head of Account)</th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 30%; text-align: right;">01/04 सुरुवातीची शिल्लक रक्कम (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows}
+              </tbody>
+              <tfoot>
+                <tr style="background: #f1f5f9; font-weight: bold; font-size: 1.15rem;">
+                  <td colspan="2" style="border: 1px solid #000; padding: 10px; text-align: center;">एकूण सुरुवातीची शिल्लक (Grand Total Opening):</td>
+                  <td style="border: 1px solid #000; padding: 10px; text-align: right; font-family: var(--hw-font); font-size: 1.25rem;">
+                    ₹ ${toMarathiNum(ledger.initialTotalOpening)} /-
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div style="font-family: var(--hw-font); font-size: 1.15rem; color: #0f2e59; margin-top: 25px; padding: 12px 16px; background: #eff6ff; border-left: 4px solid #2563eb; border-radius: 4px;">
+              दि. 01/04 रोजी चालू आर्थिक वर्षाच्या सुरुवातीस मागील शिल्लक रु. <strong>${numberToMarathiWords(ledger.initialTotalOpening)}</strong> (₹ ${toMarathiNum(ledger.initialTotalOpening)}/-) मात्र उपलब्ध आहे.
+            </div>
+            ${getPrintSignatures()}
+          </div>
+        `;
+      }
+
+      // 2. PRINT TAB 2 (A): Current Month Dual Ledger (समोरासमोर)
+      else if (mode === "entry-month") {
+        printBox.innerHTML = makeDualLedgerMonthSheet(appData.currentMonth, ledger, heads, curAcc, yData, s);
+      }
+
+      // 3. PRINT TAB 2 (B): ALL 12 MONTHS CONSOLIDATED IN DUAL LEDGER (समोरासमोर)
+      else if (mode === "entry-all") {
+        let sheetsHtml = "";
+
+        // First: 1st Page Opening Balance
+        let opRows = "";
+        heads.forEach((h, idx) => {
+          opRows += `
+            <tr>
+              <td style="text-align: center; border: 1px solid #000; padding: 6px;">${idx + 1}</td>
+              <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">${h.name}</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 6px; font-family: var(--hw-font); font-size: 1.15rem; font-weight: bold;">
+                ${toMarathiNum(h.openingBalance)} /-
+              </td>
+            </tr>
+          `;
+        });
+        sheetsHtml += `
+          <div class="cashbook-sheet" style="padding: 15mm 12mm;">
+            ${getOfficialPrintHeader("1ले पान : सुरुवातीची शिल्लक हेडनिहाय गोषवारा (दि. 01/04 रोजी)")}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 14px;">
+              <thead>
+                <tr style="background: #e2e8f0;">
+                  <th style="border: 1px solid #000; padding: 8px; width: 10%; text-align: center;">अ. क्र.</th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 60%; text-align: left;">खात्याचे नाव / उप-हेड (Head of Account)</th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 30%; text-align: right;">01/04 सुरुवातीची शिल्लक रक्कम (₹)</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${opRows}
+              </tbody>
+              <tfoot>
+                <tr style="background: #f1f5f9; font-weight: bold; font-size: 1.1rem;">
+                  <td colspan="2" style="border: 1px solid #000; padding: 8px; text-align: center;">एकूण सुरुवातीची शिल्लक:</td>
+                  <td style="border: 1px solid #000; padding: 8px; text-align: right; font-family: var(--hw-font); font-size: 1.2rem;">
+                    ₹ ${toMarathiNum(ledger.initialTotalOpening)} /-
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+            <div style="font-family: var(--hw-font); font-size: 1.1rem; color: #0f2e59; margin-top: 20px; padding: 10px 14px; background: #eff6ff; border-left: 4px solid #2563eb;">
+              दि. 01/04 रोजी चालू आर्थिक वर्षाच्या सुरुवातीस मागील शिल्लक रु. <strong>${numberToMarathiWords(ledger.initialTotalOpening)}</strong> (₹ ${toMarathiNum(ledger.initialTotalOpening)}/-) मात्र उपलब्ध आहे.
+            </div>
+            ${getPrintSignatures()}
+          </div>
+        `;
+
+        // All 12 Months: Each in Side-by-Side Dual Ledger
+        FINANCIAL_MONTHS.forEach(m => {
+          sheetsHtml += makeDualLedgerMonthSheet(m.num, ledger, heads, curAcc, yData, s);
+        });
+
+        // Finally: Last Page Final Balance Sheet
+        let finalRows = "";
+        let totOp = 0, totJ = 0, totK = 0, totCl = 0;
+        heads.forEach((h, idx) => {
+          const stats = ledger.headAnnual[h.id];
+          totOp += stats.opening;
+          totJ += stats.jama;
+          totK += stats.kharch;
+          totCl += stats.closing;
+          finalRows += `
+            <tr>
+              <td style="text-align: center; border: 1px solid #000; padding: 6px;">${idx + 1}</td>
+              <td style="border: 1px solid #000; padding: 6px; font-weight: bold;">${h.name}</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 6px; font-family: var(--hw-font);">${toMarathiNum(stats.opening)} /-</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 6px; font-family: var(--hw-font); color: #059669;">${toMarathiNum(stats.jama)} /-</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 6px; font-family: var(--hw-font); color: #dc2626;">${toMarathiNum(stats.kharch)} /-</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 6px; font-family: var(--hw-font);">${toMarathiNum(stats.closing)} /-</td>
+            </tr>
+          `;
+        });
+
+        sheetsHtml += `
+          <div class="cashbook-sheet" style="padding: 15mm 12mm;">
+            ${getOfficialPrintHeader("शेवटचे पान : वार्षिक अंतिम हेडनिहाय ताळेबंद (Final Balance Sheet - 31 मार्च अखेर)")}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 14px;">
+              <thead>
+                <tr style="background: #e2e8f0;">
+                  <th style="border: 1px solid #000; padding: 8px; width: 8%;">अ. क्र.</th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 32%;">खात्याचे नाव (Head of Account)</th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 15%;">सुरुवातीची शिल्लक<br><small>(01/04)</small></th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 15%;">वर्षभरातील जमा</th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 15%;">वर्षभरातील खर्च</th>
+                  <th style="border: 1px solid #000; padding: 8px; width: 15%;">अंतिम शिल्लक<br><small>(31/03)</small></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${finalRows}
+              </tbody>
+              <tfoot>
+                <tr style="background: #edf2f7; font-weight: bold; font-size: 1.05rem;">
+                  <td colspan="2" style="border: 1px solid #000; padding: 8px; text-align: center;">एकूण (Grand Total)</td>
+                  <td style="border: 1px solid #000; padding: 8px; text-align: right; font-family: var(--hw-font);">₹ ${toMarathiNum(totOp)} /-</td>
+                  <td style="border: 1px solid #000; padding: 8px; text-align: right; font-family: var(--hw-font); color: #059669;">₹ ${toMarathiNum(totJ)} /-</td>
+                  <td style="border: 1px solid #000; padding: 8px; text-align: right; font-family: var(--hw-font); color: #dc2626;">₹ ${toMarathiNum(totK)} /-</td>
+                  <td style="border: 1px solid #000; padding: 8px; text-align: right; font-family: var(--hw-font); color: #1a365d;">₹ ${toMarathiNum(totCl)} /-</td>
+                </tr>
+              </tfoot>
+            </table>
+            <div style="font-family: var(--hw-font); font-size: 1.1rem; color: #0f2e59; margin-top: 20px; padding: 12px 14px; background: #eff6ff; border-left: 4px solid #2563eb;">
+              सदर कॅश बुक व सादील खर्च ताळेबंद तपासला असून, 31 मार्च रोजी अखेर अंतिम पुस्तकी शिल्लक रु. <strong>${numberToMarathiWords(totCl)}</strong> (₹ ${toMarathiNum(totCl)}/-) अचूक जुळत आहे.
+            </div>
+            ${getPrintSignatures()}
+          </div>
+        `;
+
+        printBox.innerHTML = sheetsHtml;
+      }
+
+      // 4. PRINT TAB 3: Official Handwritten Kalam Register
+      else if (mode === "register") {
+        renderRegisterView();
+        const regSheets = document.getElementById("registerSheetsContainer").innerHTML;
+        printBox.innerHTML = regSheets;
+      }
+
+      // 5. PRINT TAB 4: Annual Final Balance Sheet
+      else if (mode === "annual") {
+        let finalRows = "";
+        let totOp = 0, totJ = 0, totK = 0, totCl = 0;
+        heads.forEach((h, idx) => {
+          const stats = ledger.headAnnual[h.id];
+          totOp += stats.opening;
+          totJ += stats.jama;
+          totK += stats.kharch;
+          totCl += stats.closing;
+          finalRows += `
+            <tr>
+              <td style="text-align: center; border: 1px solid #000; padding: 8px;">${idx + 1}</td>
+              <td style="border: 1px solid #000; padding: 8px; font-weight: bold;">${h.name}</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 8px; font-family: var(--hw-font); font-size: 1.15rem;">${toMarathiNum(stats.opening)} /-</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 8px; font-family: var(--hw-font); font-size: 1.15rem; color: #059669;">${toMarathiNum(stats.jama)} /-</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 8px; font-family: var(--hw-font); font-size: 1.15rem; color: #dc2626;">${toMarathiNum(stats.kharch)} /-</td>
+              <td style="text-align: right; border: 1px solid #000; padding: 8px; font-family: var(--hw-font); font-size: 1.15rem;">${toMarathiNum(stats.closing)} /-</td>
+            </tr>
+          `;
+        });
+
+        printBox.innerHTML = `
+          <div class="cashbook-sheet" style="padding: 20mm 15mm;">
+            ${getOfficialPrintHeader("शेवटचे पान : वार्षिक अंतिम हेडनिहाय ताळेबंद (Final Balance Sheet - 31 मार्च अखेर)")}
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+              <thead>
+                <tr style="background: #e2e8f0;">
+                  <th style="border: 1px solid #000; padding: 10px; width: 8%;">अ. क्र.</th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 32%;">खात्याचे नाव (Head of Account)</th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 15%;">सुरुवातीची शिल्लक<br><small>(01/04 रोजी)</small></th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 15%;">वर्षभरातील जमा<br><small>(Total Receipts)</small></th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 15%;">वर्षभरातील खर्च<br><small>(Total Expenses)</small></th>
+                  <th style="border: 1px solid #000; padding: 10px; width: 15%;">अंतिम शिल्लक<br><small>(31/03 अखेर)</small></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${finalRows}
+              </tbody>
+              <tfoot>
+                <tr style="background: #edf2f7; font-weight: bold; font-size: 1.15rem;">
+                  <td colspan="2" style="border: 1px solid #000; padding: 10px; text-align: center;">एकूण (Grand Total)</td>
+                  <td style="border: 1px solid #000; padding: 10px; text-align: right; font-family: var(--hw-font); font-size: 1.25rem; color: #1a365d;">₹ ${toMarathiNum(totOp)} /-</td>
+                  <td style="border: 1px solid #000; padding: 10px; text-align: right; font-family: var(--hw-font); font-size: 1.25rem; color: #059669;">₹ ${toMarathiNum(totJ)} /-</td>
+                  <td style="border: 1px solid #000; padding: 10px; text-align: right; font-family: var(--hw-font); font-size: 1.25rem; color: #dc2626;">₹ ${toMarathiNum(totK)} /-</td>
+                  <td style="border: 1px solid #000; padding: 10px; text-align: right; font-family: var(--hw-font); font-size: 1.25rem; color: #1a365d;">₹ ${toMarathiNum(totCl)} /-</td>
+                </tr>
+              </tfoot>
+            </table>
+            <div style="font-family: var(--hw-font); font-size: 1.15rem; color: #0f2e59; margin-top: 25px; padding: 12px 16px; background: #eff6ff; border-left: 4px solid #2563eb;">
+              सदर कॅश बुक व सादील खर्च ताळेबंद तपासला असून, 31 मार्च अखेर अंतिम पुस्तकी शिल्लक रु. <strong>${numberToMarathiWords(totCl)}</strong> (₹ ${toMarathiNum(totCl)}/-) अचूक जुळत आहे.
+            </div>
+            ${getPrintSignatures()}
+          </div>
+        `;
+      }
+
+      setTimeout(() => {
+        window.print();
+      }, 200);
+    }
+
+    function initApp() {
+      loadData();
+      refreshCurrentView();
+      switchTab('heads');
+
+      // Adjust mobile bar visibility on resize
+      window.addEventListener("resize", () => {
+        const mobBar = document.getElementById("mobileQuickBar");
+        const entryTab = document.getElementById("tab-entry");
+        const entryActive = entryTab && entryTab.classList.contains("active");
+        if (mobBar) {
+          if (entryActive && window.innerWidth <= 768) {
+            mobBar.classList.add("show-bar");
+          } else {
+            mobBar.classList.remove("show-bar");
+          }
+        }
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
+  </script>
+</body>
+</html>
