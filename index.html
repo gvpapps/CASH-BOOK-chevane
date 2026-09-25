@@ -1295,6 +1295,7 @@
             <!-- Populated dynamically -->
           </select>
           <button class="btn btn-sm btn-primary" onclick="openNewAccountModal()" title="नवीन बँक खाते जोडा">➕</button>
+          <button class="btn btn-sm btn-outline" onclick="openEditAccountModal()" title="चालू बँक खात्याचे नाव व तपशील बदला" style="border-color: #3b82f6; color: #1d4ed8; font-weight: bold; padding: 2px 7px;">✏️</button>
         </div>
 
         <!-- Year Selector -->
@@ -1388,9 +1389,12 @@
 
       <!-- Bank Account Details Card -->
       <div class="card">
-        <div class="card-header">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <div class="card-title">🏦 चालू बँक खाते तपशील</div>
-          <button class="btn btn-secondary btn-sm" onclick="saveAccountDetails()">💾 सेव्ह करा</button>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-outline btn-sm" style="border-color: #2563eb; color: #1d4ed8; font-weight: 600;" onclick="openEditAccountModal()">✏️ मोडलमध्ये बदला</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="saveAccountDetails()">💾 सेव्ह करा</button>
+          </div>
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -1630,7 +1634,7 @@
       <div class="card" style="border-top: 4px solid #1e3a8a;">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
           <div class="card-title">🏫 शाळेची अधिकृत माहिती (School Information)</div>
-          <button class="btn btn-primary btn-sm" onclick="openSchoolModal()">✏️ माहिती संपादित करा (Edit)</button>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openSchoolModal()" style="font-weight: 700; padding: 6px 14px; font-size: 0.88rem;">✏️ शाळा माहिती बदला (Edit School)</button>
         </div>
         <p style="color: #64748b; font-size: 0.84rem; margin-bottom: 12px;">
           येथे नोंदवलेला UDISE कोड, शाळेचे नाव, केंद्र व पत्ते Google Firebase क्लाऊडवर आपोआप सुरक्षित सिंक होतात.
@@ -1664,9 +1668,12 @@
 
       <!-- All Bank Accounts Management -->
       <div class="card">
-        <div class="card-header">
-          <div class="card-title">🏦 सर्व बँक खात्यांची यादी</div>
-          <button class="btn btn-primary btn-sm" onclick="openNewAccountModal()">➕ नवीन खाते जोडा</button>
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div class="card-title">🏦 सर्व बँक खात्यांचे व्यवस्थापन</div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button class="btn btn-primary btn-sm" onclick="openNewAccountModal()">➕ नवीन खाते जोडा</button>
+            <button class="btn btn-outline btn-sm" style="border-color: #2563eb; color: #1d4ed8; font-weight: 600;" onclick="openEditAccountModal()">✏️ चालू खाते बदला</button>
+          </div>
         </div>
         <div class="table-responsive">
           <table>
@@ -1916,36 +1923,37 @@
     </div>
   </div>
 
-  <!-- 2. New Bank Account Modal -->
+  <!-- 2. Bank Account Modal (Add / Edit) -->
   <div class="modal-backdrop" id="accountModal">
     <div class="modal-box">
       <div class="modal-header">
-        <h3>➕ नवीन बँक खाते जोडा</h3>
+        <h3 id="accountModalTitle">➕ नवीन बँक खाते जोडा</h3>
         <button class="modal-close" onclick="closeModal('accountModal')">&times;</button>
       </div>
       <div class="modal-body">
+        <input type="hidden" id="editAccId" />
         <div class="form-group">
-          <label>खात्याचे नाव: *</label>
-          <input type="text" id="newAccName" placeholder="उदा. समग्र शिक्षा / क्रीडा निधी खाते" required />
+          <label>खात्याचे नाव (Account Name): *</label>
+          <input type="text" id="newAccName" placeholder="उदा. शाळा सादील खर्च व शा.पो.आहार" required />
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>बँकेचे नाव:</label>
-            <input type="text" id="newAccBank" placeholder="उदा. स्टेट बँक ऑफ इंडिया" />
+            <label>बँकेचे नाव (Bank Name):</label>
+            <input type="text" id="newAccBank" placeholder="उदा. बँक ऑफ महाराष्ट्र" />
           </div>
           <div class="form-group">
-            <label>बँक खाते क्रमांक:</label>
-            <input type="text" id="newAccNumber" placeholder="उदा. 34567890123" />
+            <label>बँक खाते क्रमांक (A/C No.):</label>
+            <input type="text" id="newAccNumber" placeholder="उदा. 60123456789" />
           </div>
         </div>
         <div class="form-group">
           <label>IFSC कोड:</label>
-          <input type="text" id="newAccIfsc" placeholder="उदा. SBIN0001234" />
+          <input type="text" id="newAccIfsc" placeholder="उदा. MAHB0000123" />
         </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeModal('accountModal')">रद्द करा</button>
-        <button class="btn btn-success" onclick="saveNewAccount()">➕ खाते तयार करा</button>
+        <button class="btn btn-primary" id="accountModalSaveBtn" onclick="saveAccountModal()">💾 खाते सेव्ह करा</button>
       </div>
     </div>
   </div>
@@ -3059,8 +3067,9 @@
           <td>${a.bankName || "-"}</td>
           <td>${a.accountNo || "-"}</td>
           <td>${a.ifsc || "-"}</td>
-          <td class="text-center">
-            ${appData.accounts.length > 1 ? `<button class="btn btn-sm btn-danger" onclick="deleteAccount('${a.id}')">हटवा</button>` : `<small style="color: #94a3b8;">मुख्य खाते</small>`}
+          <td class="text-center" style="white-space: nowrap;">
+            <button class="btn btn-sm btn-outline" style="border-color: #2563eb; color: #1d4ed8; font-weight: 600; padding: 3px 8px; margin-right: 4px;" onclick="openEditAccountModal('${a.id}')" title="या खात्याचे नाव व बँक माहिती बदला">✏️ बदला</button>
+            ${appData.accounts.length > 1 ? `<button class="btn btn-sm btn-danger" style="padding: 3px 8px;" onclick="deleteAccount('${a.id}')">🗑️ हटवा</button>` : `<small style="color: #94a3b8;">मुख्य खाते</small>`}
           </td>
         `;
         tbody.appendChild(tr);
@@ -3488,10 +3497,22 @@
       curAcc.ifsc = document.getElementById("accEditIfsc").value.trim();
       saveData();
       refreshCurrentView();
-      showToast("बँक तपशील जतन झाले!");
+      if (typeof firebaseSync !== 'undefined' && firebaseSync.config && firebaseSync.config.enabled && firebaseSync.config.firebaseUrl) {
+        firebaseSync.forcePushData(true);
+      }
+      showToast("✅ बँक खाते तपशील जतन झाले व क्लाऊडवर सिंक झाले!");
     }
 
     function openNewAccountModal() {
+      const titleEl = document.getElementById("accountModalTitle");
+      if (titleEl) titleEl.innerText = "➕ नवीन बँक खाते जोडा";
+      const saveBtn = document.getElementById("accountModalSaveBtn");
+      if (saveBtn) {
+        saveBtn.innerText = "➕ खाते तयार करा";
+        saveBtn.className = "btn btn-success";
+      }
+      const editInput = document.getElementById("editAccId");
+      if (editInput) editInput.value = "";
       document.getElementById("newAccName").value = "";
       document.getElementById("newAccBank").value = "";
       document.getElementById("newAccNumber").value = "";
@@ -3499,33 +3520,89 @@
       openModal("accountModal");
     }
 
-    function saveNewAccount() {
-      const name = document.getElementById("newAccName").value.trim();
-      if (!name) {
-        alert("कृपया खात्याचे नाव टाका!");
+    function openEditAccountModal(accId = null) {
+      const targetId = accId || appData.currentAccountId;
+      const acc = (appData.accounts || []).find(a => a.id === targetId);
+      if (!acc) {
+        alert("बँक खाते सापडले नाही!");
         return;
       }
-      const newAcc = {
-        id: "acc_" + Date.now(),
-        name: name,
-        bankName: document.getElementById("newAccBank").value.trim(),
-        accountNo: document.getElementById("newAccNumber").value.trim(),
-        ifsc: document.getElementById("newAccIfsc").value.trim(),
-        years: {
-          [appData.currentYear]: {
-            heads: [
-              { id: "h_" + Date.now(), name: "सामान्य खर्च निधी", openingBalance: 0 }
-            ],
-            months: {}
+      const titleEl = document.getElementById("accountModalTitle");
+      if (titleEl) titleEl.innerText = "✏️ बँक खाते तपशील बदला";
+      const saveBtn = document.getElementById("accountModalSaveBtn");
+      if (saveBtn) {
+        saveBtn.innerText = "💾 बदल जतन करा";
+        saveBtn.className = "btn btn-primary";
+      }
+      const editInput = document.getElementById("editAccId");
+      if (editInput) editInput.value = acc.id;
+      document.getElementById("newAccName").value = acc.name || "";
+      document.getElementById("newAccBank").value = acc.bankName || "";
+      document.getElementById("newAccNumber").value = acc.accountNo || "";
+      document.getElementById("newAccIfsc").value = acc.ifsc || "";
+      openModal("accountModal");
+    }
+
+    function saveAccountModal() {
+      const editIdEl = document.getElementById("editAccId");
+      const editId = editIdEl ? editIdEl.value.trim() : "";
+      const name = document.getElementById("newAccName").value.trim();
+      const bankName = document.getElementById("newAccBank").value.trim();
+      const accountNo = document.getElementById("newAccNumber").value.trim();
+      const ifsc = document.getElementById("newAccIfsc").value.trim();
+
+      if (!name) {
+        alert("कृपया खात्याचे नाव भरा!");
+        return;
+      }
+
+      if (editId) {
+        // Edit existing account
+        const acc = (appData.accounts || []).find(a => a.id === editId);
+        if (acc) {
+          acc.name = name;
+          acc.bankName = bankName;
+          acc.accountNo = accountNo;
+          acc.ifsc = ifsc;
+          saveData();
+          closeModal("accountModal");
+          refreshCurrentView();
+          if (typeof firebaseSync !== 'undefined' && firebaseSync.config && firebaseSync.config.enabled && firebaseSync.config.firebaseUrl) {
+            firebaseSync.forcePushData(true);
           }
+          showToast("✅ बँक खाते तपशील अद्ययावत झाले व क्लाऊडवर सिंक झाले!");
         }
-      };
-      appData.accounts.push(newAcc);
-      appData.currentAccountId = newAcc.id;
-      saveData();
-      closeModal("accountModal");
-      refreshCurrentView();
-      showToast("नवीन बँक खाते तयार झाले!");
+      } else {
+        // Create new account
+        const newAcc = {
+          id: "acc_" + Date.now(),
+          name: name,
+          bankName: bankName,
+          accountNo: accountNo,
+          ifsc: ifsc,
+          years: {
+            [appData.currentYear]: {
+              heads: [
+                { id: "h_" + Date.now(), name: "सामान्य खर्च निधी", openingBalance: 0 }
+              ],
+              months: {}
+            }
+          }
+        };
+        appData.accounts.push(newAcc);
+        appData.currentAccountId = newAcc.id;
+        saveData();
+        closeModal("accountModal");
+        refreshCurrentView();
+        if (typeof firebaseSync !== 'undefined' && firebaseSync.config && firebaseSync.config.enabled && firebaseSync.config.firebaseUrl) {
+          firebaseSync.forcePushData(true);
+        }
+        showToast("✅ नवीन बँक खाते तयार झाले व क्लाऊडवर सिंक झाले!");
+      }
+    }
+
+    function saveNewAccount() {
+      saveAccountModal();
     }
 
     function deleteAccount(accId) {
