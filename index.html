@@ -699,118 +699,364 @@
       }
     }
 
-    /* ==================== MOBILE SPECIFIC RESPONSIVE STYLES ==================== */
+    /* ==================== MOBILE APP-LIKE UI STYLES (iOS & Android Native Feel) ==================== */
     @media (max-width: 768px) {
+      /* 1. App Header: Compact native app bar */
       .navbar {
-        padding: 8px 10px;
-        position: relative !important;
-        top: auto !important;
-      }
-      .nav-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
-      }
-      .brand-section {
-        justify-content: center;
-      }
-      .top-controls {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-      }
-      .ctrl-group {
-        width: 100%;
-        padding: 4px 6px;
-      }
-      .ctrl-group select {
-        width: 100%;
-        font-size: 0.82rem;
-      }
-      .tabs-bar {
         position: sticky !important;
         top: 0 !important;
-        z-index: 99 !important;
-        background: #ffffff;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 100 !important;
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
+        color: #ffffff !important;
+        padding: 8px 12px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
       }
-      .tabs-container {
-        padding: 0 6px;
+      .nav-container {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 6px !important;
       }
-      .tab-btn {
-        padding: 10px 12px;
-        font-size: 0.85rem;
+      .brand-section {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
       }
+      .brand-section .logo-box {
+        font-size: 1.25rem !important;
+        margin-right: 6px !important;
+      }
+      .brand-section h1 {
+        font-size: 0.98rem !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 220px !important;
+        color: #ffffff !important;
+      }
+      .brand-section p {
+        display: none !important;
+      }
+      .top-controls {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr auto !important;
+        gap: 6px !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+      .ctrl-group {
+        background: rgba(255, 255, 255, 0.16) !important;
+        border-radius: 8px !important;
+        padding: 4px 6px !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      .ctrl-group label {
+        display: none !important;
+      }
+      .ctrl-group select {
+        background: transparent !important;
+        color: #ffffff !important;
+        border: none !important;
+        font-size: 0.82rem !important;
+        font-weight: 600 !important;
+        padding: 2px 0 !important;
+        width: 100% !important;
+        outline: none !important;
+      }
+      .ctrl-group select option {
+        background: #ffffff !important;
+        color: #0f172a !important;
+      }
+      .ctrl-group .btn {
+        display: none !important;
+      }
+      .cloud-pill {
+        padding: 6px 10px !important;
+        font-size: 0.78rem !important;
+        white-space: nowrap !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.3) !important;
+        cursor: pointer;
+      }
+      .top-controls > button.btn-outline {
+        display: none !important;
+      }
+
+      /* 2. Hide Top Desktop Tabs Bar on Mobile (rely on bottom dock) */
+      .tabs-bar {
+        display: none !important;
+      }
+
+      /* 3. Main Content Spacing for Bottom Dock and Quick FAB */
       .main-content {
-        margin: 10px auto;
-        padding: 0 8px 75px; /* Extra bottom space for mobile floating action bar */
+        margin: 8px auto !important;
+        padding: 0 10px calc(75px + env(safe-area-inset-bottom, 0px)) !important;
       }
+      /* When on Tab 2, extra bottom padding for floating entry bar */
+      .main-content:has(#tab-entry.active) {
+        padding-bottom: calc(130px + env(safe-area-inset-bottom, 0px)) !important;
+      }
+
+      /* 4. Native App Cards */
       .card {
-        padding: 12px 10px;
-        margin-bottom: 12px;
+        padding: 14px 12px !important;
+        border-radius: 12px !important;
+        margin-bottom: 12px !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid #e2e8f0 !important;
       }
+      .card-header {
+        margin-bottom: 10px !important;
+        padding-bottom: 8px !important;
+      }
+      .card-title {
+        font-size: 0.96rem !important;
+      }
+
+      /* 5. Month Summary Grid: 2x2 Wallet Cards */
       .stats-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+        margin-bottom: 12px !important;
       }
       .stat-card {
-        padding: 8px 10px;
-      }
-      .stat-value {
-        font-size: 1.15rem;
+        padding: 10px !important;
+        border-radius: 10px !important;
       }
       .stat-label {
-        font-size: 0.74rem;
+        font-size: 0.72rem !important;
       }
+      .stat-value {
+        font-size: 1.12rem !important;
+        font-weight: 800 !important;
+      }
+
+      /* 6. Months Selector Carousel */
+      .months-strip {
+        padding: 4px !important;
+        margin-bottom: 12px !important;
+        border-radius: 10px !important;
+        gap: 6px !important;
+      }
+      .month-pill {
+        min-width: 68px !important;
+        padding: 7px 8px !important;
+        font-size: 0.82rem !important;
+        border-radius: 8px !important;
+      }
+
+      /* 7. Tab 2 Ledger: Mobile Transaction Cards */
       .ledger-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
       }
-      .form-row {
-        grid-template-columns: 1fr;
-        gap: 8px;
+      .ledger-col {
+        border-radius: 12px !important;
+        padding: 10px !important;
       }
-      /* Bottom sheet style for modals on phones */
-      .modal-backdrop {
-        align-items: flex-end;
-        padding: 0;
+      .ledger-col-header {
+        padding: 10px !important;
+        border-radius: 8px !important;
+        font-size: 0.92rem !important;
       }
-      .modal-box {
-        max-width: 100%;
-        border-radius: 14px 14px 0 0;
-        max-height: 92vh;
-        margin: 0;
+      .ledger-table thead {
+        display: none !important;
       }
-      input, select, textarea {
-        font-size: 16px !important; /* Prevents auto-zoom on mobile iOS/Android */
-        min-height: 38px;
+      .ledger-table,
+      .ledger-table tbody,
+      .ledger-table tr {
+        display: block !important;
+        width: 100% !important;
       }
-      /* Mobile quick bottom bar */
+      .ledger-table tr {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
+        padding: 10px 12px !important;
+        margin-bottom: 8px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 5px !important;
+      }
+      .ledger-table tr td {
+        display: block !important;
+        border: none !important;
+        padding: 0 !important;
+        text-align: left !important;
+      }
+      /* Date chip */
+      .ledger-table tr td:nth-child(1) {
+        display: inline-block !important;
+        font-size: 0.78rem !important;
+        color: #475569 !important;
+        background: #f1f5f9 !important;
+        padding: 2px 8px !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        width: fit-content !important;
+      }
+      /* Head Name */
+      .ledger-table tr td:nth-child(2) {
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+        margin-top: 1px !important;
+      }
+      /* Details & Particulars */
+      .ledger-table tr td:nth-child(3) {
+        font-size: 0.85rem !important;
+        color: #475569 !important;
+        line-height: 1.35 !important;
+      }
+      /* Amount */
+      .ledger-table tr td:nth-child(4) {
+        font-size: 1.25rem !important;
+        font-weight: 800 !important;
+        font-family: var(--hw-font) !important;
+        margin: 3px 0 !important;
+      }
+      /* Action Buttons */
+      .ledger-table tr td:nth-child(5) {
+        display: flex !important;
+        gap: 8px !important;
+        justify-content: flex-end !important;
+        margin-top: 4px !important;
+        padding-top: 6px !important;
+        border-top: 1px dashed #f1f5f9 !important;
+      }
+      .ledger-table tr td:nth-child(5) .btn {
+        padding: 6px 14px !important;
+        font-size: 0.82rem !important;
+        border-radius: 6px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+      }
+
+      /* 8. Tab 1 Heads table mobile styling */
+      #headsTableBody tr td input[type="number"] {
+        width: 100px !important;
+        font-size: 1rem !important;
+        padding: 4px 6px !important;
+      }
+
+      /* 9. Mobile Floating Quick Add Bar */
       .mobile-quick-bar {
+        position: fixed !important;
+        bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: rgba(255, 255, 255, 0.96) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        border-top: 1px solid #e2e8f0 !important;
+        padding: 8px 12px !important;
+        z-index: 900 !important;
         display: none;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: #ffffff;
-        border-top: 1.5px solid #cbd5e1;
-        padding: 8px 12px;
-        z-index: 90;
-        gap: 8px;
-        box-shadow: 0 -3px 10px rgba(0,0,0,0.08);
+        gap: 10px !important;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08) !important;
       }
       .mobile-quick-bar.show-bar {
         display: flex !important;
       }
       .mobile-quick-bar .btn {
-        flex: 1;
-        padding: 10px;
-        font-size: 0.95rem;
+        flex: 1 !important;
+        padding: 11px 10px !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      }
+
+      /* 10. Native Bottom Navigation Bar */
+      .mobile-bottom-nav {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #ffffff !important;
+        border-top: 1px solid #cbd5e1 !important;
+        display: flex !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        padding: 5px 2px calc(5px + env(safe-area-inset-bottom, 0px)) !important;
+        z-index: 950 !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.08) !important;
+      }
+      .mobile-nav-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+        border: none !important;
+        padding: 4px 2px !important;
+        color: #64748b !important;
+        font-size: 0.7rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        border-radius: 8px !important;
+        transition: all 0.15s ease !important;
+        flex: 1 !important;
+        text-align: center !important;
+      }
+      .mobile-nav-item .nav-icon {
+        font-size: 1.25rem !important;
+        line-height: 1 !important;
+        margin-bottom: 2px !important;
+      }
+      .mobile-nav-item.active {
+        color: #1e3a8a !important;
+        background: #eff6ff !important;
+        font-weight: 700 !important;
+      }
+      .mobile-nav-item.active .nav-icon {
+        transform: scale(1.15) !important;
+      }
+
+      /* 11. Modal Bottom-Sheet on Mobile */
+      .modal-backdrop {
+        align-items: flex-end !important;
+        padding: 0 !important;
+        backdrop-filter: blur(4px) !important;
+      }
+      .modal-box {
+        max-width: 100% !important;
+        width: 100% !important;
+        border-radius: 20px 20px 0 0 !important;
+        max-height: 90vh !important;
+        margin: 0 !important;
+        padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+        animation: slideUpSheet 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      }
+      @keyframes slideUpSheet {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      .modal-footer {
+        padding-top: 12px !important;
+      }
+      .modal-footer .btn {
+        padding: 12px !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+      }
+      input, select, textarea {
+        font-size: 16px !important;
+        min-height: 42px !important;
+        border-radius: 8px !important;
       }
     }
 
     @media (min-width: 769px) {
-      .mobile-quick-bar {
+      .mobile-quick-bar,
+      .mobile-bottom-nav {
         display: none !important;
       }
     }
@@ -1394,12 +1640,40 @@
   <!-- Mobile Floating Quick Add Bar (Only in Tab 2 on Mobile) -->
   <div class="mobile-quick-bar no-print" id="mobileQuickBar" style="display: none;">
     <button class="btn btn-success" onclick="openTransactionModal('jama')">
-      ➕ नवीन जमा नोंद
+      ➕ जमा नोंद (Receipt)
     </button>
     <button class="btn btn-danger" onclick="openTransactionModal('kharch')">
-      ➕ नवीन खर्च नोंद
+      ➕ खर्च नोंद (Payment)
     </button>
   </div>
+
+  <!-- ==================== MOBILE APP BOTTOM NAVIGATION BAR (FIXED DOCK) ==================== -->
+  <nav class="mobile-bottom-nav no-print" id="mobileBottomNav">
+    <button type="button" class="mobile-nav-item active" onclick="switchTab('heads')" data-tab="heads">
+      <span class="nav-icon">📑</span>
+      <span class="nav-label">शिल्लक</span>
+    </button>
+    <button type="button" class="mobile-nav-item" onclick="switchTab('entry')" data-tab="entry">
+      <span class="nav-icon">📝</span>
+      <span class="nav-label">एन्ट्री</span>
+    </button>
+    <button type="button" class="mobile-nav-item" onclick="switchTab('register')" data-tab="register">
+      <span class="nav-icon">📖</span>
+      <span class="nav-label">रजिस्टर</span>
+    </button>
+    <button type="button" class="mobile-nav-item" onclick="switchTab('annual')" data-tab="annual">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">ताळेबंद</span>
+    </button>
+    <button type="button" class="mobile-nav-item" onclick="switchTab('firebase')" data-tab="firebase">
+      <span class="nav-icon">☁️</span>
+      <span class="nav-label">सिंक</span>
+    </button>
+    <button type="button" class="mobile-nav-item" onclick="switchTab('backup')" data-tab="backup">
+      <span class="nav-icon">⚙️</span>
+      <span class="nav-label">बॅकअप</span>
+    </button>
+  </nav>
 
   <!-- ==================== DEDICATED PRINT CONTAINER (FOR PERFECT VERTICAL A4 PDF) ==================== -->
   <div id="printContainer" class="print-only">
@@ -2607,6 +2881,15 @@
         }
       }
 
+      // Sync active state on Mobile Bottom Navigation Dock
+      document.querySelectorAll(".mobile-nav-item").forEach(b => {
+        if (b.dataset.tab === tabId) {
+          b.classList.add("active");
+        } else {
+          b.classList.remove("active");
+        }
+      });
+
       // Show/Hide mobile quick action bar only in Tab 2 (Data Entry)
       const mobBar = document.getElementById("mobileQuickBar");
       if (mobBar) {
@@ -2616,6 +2899,9 @@
           mobBar.classList.remove("show-bar");
         }
       }
+
+      // Smooth scroll to top of page on tab switch for app-like transition
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
       if (tabId === "heads") {
         renderHeadsTab();
