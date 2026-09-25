@@ -815,6 +815,51 @@
       }
     }
 
+    /* Cloud Sync Status Pill & Badges */
+    .cloud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.28);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .cloud-pill:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #94a3b8;
+    }
+    .status-dot.synced { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .status-dot.syncing { background: #f59e0b; animation: pulseDot 1s infinite alternate; }
+    .status-dot.error, .status-dot.offline { background: #ef4444; }
+    @keyframes pulseDot {
+      from { transform: scale(0.85); opacity: 0.7; }
+      to { transform: scale(1.25); opacity: 1; }
+    }
+    .badge-sync {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .badge-sync-success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .badge-sync-warning { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .badge-sync-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    .badge-sync-secondary { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
     /* Toast Notification */
     #toast {
       position: fixed;
@@ -881,8 +926,14 @@
           <button class="btn btn-sm btn-success" onclick="openNewYearModal()" title="नवीन वर्ष जोडा">➕</button>
         </div>
 
-        <button class="btn btn-outline btn-sm" style="grid-column: span 2;" onclick="openSchoolModal()" title="शाळेची माहिती बदला">
-          ✏️ शाळेचे नाव व माहिती बदला
+        <!-- Cloud Sync Status Pill -->
+        <div class="cloud-pill" id="cloudStatusPill" onclick="openCloudSyncModal()" title="Google Firebase लाईव्ह क्लाऊड सिंक नियंत्रण">
+          <span id="cloudStatusDot" class="status-dot"></span>
+          <span id="cloudStatusText">☁️ सिंक: ऑफलाईन</span>
+        </div>
+
+        <button class="btn btn-outline btn-sm" onclick="openSchoolModal()" title="शाळेची माहिती बदला">
+          ✏️ शाळेची माहिती
         </button>
       </div>
     </div>
@@ -1221,6 +1272,34 @@
             🔄 मूळ नमुना डेटा पूर्ववत करा
           </button>
         </div>
+      <!-- Cloud Sync & Multi-Device Card -->
+      <div class="card" style="border-top: 4px solid #2563eb;">
+        <div class="card-header">
+          <div class="card-title">☁️ Google Firebase क्लाऊड सिंक व मल्टि-डिव्हाइस (मोबाईल व लॅपटॉप) लाईव्ह डेटा</div>
+          <button class="btn btn-primary btn-sm" onclick="openCloudSyncModal()">⚙️ सिंक सेटिंग्ज</button>
+        </div>
+        <p style="color: #475569; font-size: 0.88rem; margin-bottom: 12px;">
+          Google Firebase Realtime Database द्वारे कॉम्प्युटर, लॅपटॉप आणि मोबाईलवर लाईव्ह ऑटो-सिंक सुरू करा. एका ठिकाणी केलेली नोंद दुसऱ्या डिव्हाइसवर आपोआप दिसते.
+        </p>
+
+        <div id="tabBackupSyncStatusBox" style="margin-bottom: 14px; padding: 10px 14px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px;">
+          <!-- Rendered by cloudSync.updateUIStatus() -->
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-primary btn-sm" onclick="cloudSync.pushToCloud(false)">
+            ☁️ आता क्लाऊडवर सेव्ह करा (Push)
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="cloudSync.pullFromCloud(false)">
+            📥 क्लाऊडवरून आणा (Pull)
+          </button>
+          <button class="btn btn-success btn-sm" onclick="cloudSync.shareFullDataViaWhatsApp()" style="background: #16a34a; border-color: #15803d;">
+            📲 WhatsApp 1-क्लिक डेटा सिंक
+          </button>
+          <button class="btn btn-warning btn-sm" onclick="cloudSync.restoreFromCloudBackup()" title="चुकीने डेटा डिलिट झाल्यास मागील सुरक्षित क्लाऊड प्रत परत मिळवा">
+            🚑 आणीबाणी डेटा रिकव्हरी
+          </button>
+        </div>
       </div>
 
       <!-- All Bank Accounts Management -->
@@ -1474,6 +1553,102 @@
         <button class="btn btn-primary" onclick="saveSchoolInfo()">💾 माहिती सेव्ह करा</button>
       </div>
     </div>
+  <!-- 6. Cloud Sync & Firebase Modal -->
+  <div class="modal-backdrop" id="cloudSyncModal">
+    <div class="modal-box" style="max-width: 640px; border-top: 4px solid #2563eb;">
+      <div class="modal-header" style="background: #eff6ff;">
+        <h3 style="color: #1e40af; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+          <span>☁️</span> Google Firebase क्लाऊड सिंक (Live Multi-Device Sync)
+        </h3>
+        <button class="modal-close" onclick="closeModal('cloudSyncModal')">&times;</button>
+      </div>
+      <div class="modal-body" style="max-height: 80vh; overflow-y: auto;">
+        
+        <!-- Method 1: WhatsApp 1-Click Instant Sync -->
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span style="font-size: 1.3rem;">📲</span>
+            <strong style="color: #166534; font-size: 0.95rem;">पद्धत 1: WhatsApp द्वारे 1-क्लिक डेटा सिंक</strong>
+          </div>
+          <p style="font-size: 0.82rem; color: #15803d; margin-bottom: 10px;">
+            कोणत्याही सर्व्हरशिवाय — 1-क्लिकमध्ये संपूर्ण कॅश बुक डेटा WhatsApp वर पाठवून मोबाईल व कॉम्प्युटर सिंक करा!
+          </p>
+          <button type="button" class="btn btn-success btn-sm" style="background: #16a34a; border-color: #15803d; width: 100%; justify-content: center; font-weight: 700; padding: 8px;" onclick="cloudSync.shareFullDataViaWhatsApp()">
+            📲 संपूर्ण कॅश बुक डेटा WhatsApp वर पाठवा (मोबाईलवर उघडण्यासाठी)
+          </button>
+        </div>
+
+        <!-- Method 2: Google Firebase Realtime Cloud Database -->
+        <div style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 14px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span style="font-size: 1.3rem;">☁️</span>
+            <strong style="color: #1e293b; font-size: 0.95rem;">पद्धत 2: Google Firebase Realtime Database (ऑटोमॅटिक लाईव्ह सिंक)</strong>
+          </div>
+          <p style="font-size: 0.82rem; color: #475569; margin-bottom: 10px;">
+            शाळेच्या सर्व खात्यांचा डेटा आपोआप कॉम्प्युटर व मोबाईलवर लाईव्ह सिंक ठेवण्यासाठी मोफत Google Firebase Realtime Database जोडा.
+          </p>
+
+          <div id="cloudModalStatusText" style="margin-bottom: 12px;">
+            <span class="badge-sync badge-sync-secondary">स्थिती: तपासत आहे...</span>
+          </div>
+
+          <div id="mdmAutoDetectedBanner" style="display: none; background: #fefce8; border: 1px solid #fef08a; padding: 8px 10px; border-radius: 6px; font-size: 0.82rem; color: #854d0e; margin-bottom: 10px;">
+            💡 <strong>MDM ॲपमधील Firebase URL आपोआप सापडली आहे!</strong> ती खाली भरण्यात आली आहे.
+          </div>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label>शाळेचा UDISE क्रमांक: *</label>
+            <input type="text" id="cloudSchoolCode" placeholder="उदा. 27240801201" required />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label>सुरक्षा पिन (Secret PIN): *</label>
+            <input type="password" id="cloudSecretPin" value="Ican@123" required />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 10px;">
+            <label>Google Firebase Database URL (Realtime Database): *</label>
+            <input type="url" id="cloudFirebaseUrl" placeholder="https://your-project-default-rtdb.firebaseio.com/" />
+            <small style="color: #64748b; font-size: 0.76rem;">उदा. <code>https://school-cashbook-default-rtdb.firebaseio.com/</code> (शेवटी .firebaseio.com असावे)</small>
+          </div>
+
+          <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 6px; padding: 10px; font-size: 0.8rem; color: #1e3a8a; margin-bottom: 12px; line-height: 1.5;">
+            <strong>💡 Firebase सुरू करण्यासाठी 4 सोप्या पायऱ्या:</strong>
+            <ol style="margin: 4px 0 0 16px; padding: 0;">
+              <li>Google वर <strong><a href="https://console.firebase.google.com/" target="_blank" style="color: #2563eb; text-decoration: underline;">Firebase Console</a></strong> उघडून <strong>Realtime Database</strong> तयार करा (किंवा जुन्या MDM प्रोजेक्टचीच URL वापरा).</li>
+              <li>डेटाबेसच्या <strong>Rules</strong> टॅबमध्ये <code>{ "rules": { ".read": true, ".write": true } }</code> सेट करून <strong>Publish</strong> करा.</li>
+              <li>डेटाबेसच्या वर दिसणारी URL कॉपी करून वरील बॉक्समध्ये टाका.</li>
+              <li><strong>"🔍 Firebase कनेक्शन तपासा"</strong> दाबा व यशस्वी संदेश आल्यावर खालील <strong>"💾 सेव्ह करा व सुरू करा"</strong> दाबा.</li>
+            </ol>
+          </div>
+
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+            <button type="button" class="btn btn-sm btn-outline" style="color: #0284c7; border-color: #38bdf8;" onclick="cloudSync.testFirebaseConnection()">
+              🔍 Firebase कनेक्शन तपासा
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" onclick="cloudSync.pushToCloud(false)">
+              ☁️ आता क्लाऊडवर सेव्ह करा
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" onclick="cloudSync.pullFromCloud(false)">
+              📥 क्लाऊडवरून आणा
+            </button>
+            <button type="button" class="btn btn-sm btn-outline" style="color: #d97706; border-color: #fcd34d;" onclick="cloudSync.restoreFromCloudBackup()" title="चुकीने डेटा डिलिट झाला असल्यास सुरक्षित मागील प्रत मिळवा">
+              🚑 आणीबाणी डेटा रिकव्हरी
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" class="btn btn-danger btn-sm" onclick="cloudSync.disableCloudSync()">
+          ❌ सिंक बंद करा
+        </button>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal('cloudSyncModal')">बंद करा</button>
+          <button type="button" class="btn btn-success btn-sm" onclick="saveCloudSyncSettingsModal()">💾 सेव्ह करा व सुरू करा</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Toast Element -->
@@ -1715,6 +1890,10 @@
         safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
       } catch (e) {
         console.error("Failed to save data:", e);
+      }
+      // Auto-schedule cloud sync if Firebase is active
+      if (typeof cloudSync !== 'undefined' && cloudSync.scheduleDebouncedPush) {
+        cloudSync.scheduleDebouncedPush();
       }
     }
 
@@ -2261,6 +2440,9 @@
       renderRegisterView();
       renderAnnualTab();
       renderBackupTab();
+      if (typeof cloudSync !== 'undefined' && cloudSync.updateUIStatus) {
+        cloudSync.updateUIStatus();
+      }
     }
 
     function switchTab(tabId) {
@@ -3144,8 +3326,645 @@
       }, 200);
     }
 
+    // =========================================================================
+    // ☁️ GOOGLE FIREBASE REALTIME DATABASE LIVE CLOUD SYNC & MULTI-DEVICE ENGINE
+    // =========================================================================
+    const cloudSync = {
+      config: {
+        enabled: false,
+        autoSync: true,
+        schoolCode: '',
+        secretPin: 'Ican@123',
+        firebaseUrl: '',
+        lastSyncTime: null,
+        status: 'idle', // 'idle', 'syncing', 'synced', 'error', 'offline'
+        lastError: ''
+      },
+      isSyncing: false,
+      debounceTimer: null,
+      SYNC_STORAGE_KEY: 'CASHBOOK_CLOUD_SYNC_CONFIG',
+
+      init() {
+        this.loadConfig();
+        this.bindOnlineEvents();
+        this.checkUrlParamsForDataImport();
+
+        // If enabled, auto pull on startup
+        if (this.config.enabled && this.config.firebaseUrl && this.config.schoolCode) {
+          setTimeout(() => {
+            this.pullFromCloud(true);
+          }, 800);
+        }
+        this.updateUIStatus();
+      },
+
+      loadConfig() {
+        try {
+          const saved = safeStorage.getItem(this.SYNC_STORAGE_KEY);
+          if (saved) {
+            this.config = Object.assign({}, this.config, JSON.parse(saved));
+          } else {
+            // Auto-detect from MDM app if configured on same device/browser
+            const mdmSaved = safeStorage.getItem('MDM_CLOUD_SYNC_CONFIG');
+            if (mdmSaved) {
+              const mdmConfig = JSON.parse(mdmSaved);
+              if (mdmConfig && mdmConfig.firebaseUrl) {
+                this.config.firebaseUrl = mdmConfig.firebaseUrl;
+                if (mdmConfig.schoolCode) this.config.schoolCode = mdmConfig.schoolCode;
+                if (mdmConfig.secretPin) this.config.secretPin = mdmConfig.secretPin;
+                this.config.enabled = true;
+                this.saveConfig();
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Could not load cloud sync config:", e);
+        }
+      },
+
+      saveConfig() {
+        try {
+          safeStorage.setItem(this.SYNC_STORAGE_KEY, JSON.stringify(this.config));
+        } catch (e) {
+          console.warn("Could not save cloud sync config:", e);
+        }
+        this.updateUIStatus();
+      },
+
+      bindOnlineEvents() {
+        window.addEventListener('online', () => {
+          this.config.status = 'idle';
+          this.updateUIStatus();
+          if (this.config.enabled && this.config.firebaseUrl) {
+            this.pushToCloud(true);
+          }
+        });
+        window.addEventListener('offline', () => {
+          this.config.status = 'offline';
+          this.updateUIStatus();
+        });
+      },
+
+      scheduleDebouncedPush() {
+        if (this.isSyncing) return;
+        if (this.debounceTimer) clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(() => {
+          if (!this.isSyncing && this.config.enabled && this.config.firebaseUrl && this.config.autoSync) {
+            this.pushToCloud(true);
+          }
+        }, 2500);
+      },
+
+      getSchoolUdise() {
+        return String(
+          (appData && appData.schoolInfo && appData.schoolInfo.udise)
+          || this.config.schoolCode
+          || '27240801201'
+        ).trim();
+      },
+
+      getCloudKey() {
+        const udise = this.getSchoolUdise().replace(/[^a-zA-Z0-9_-]/g, '_');
+        return `cashbook_${udise}`;
+      },
+
+      async pushToCloud(isSilent = false) {
+        if (!this.config.firebaseUrl) {
+          if (!isSilent) showToast('ℹ️ थेट क्लाऊडसाठी कृपया Firebase Realtime Database URL प्रविष्ट करा.');
+          return false;
+        }
+        if (this.isSyncing) return false;
+        this.isSyncing = true;
+
+        if (!navigator.onLine) {
+          this.isSyncing = false;
+          this.config.status = 'offline';
+          this.config.lastError = 'इंटरनेट कनेक्शन बंद आहे.';
+          this.updateUIStatus();
+          if (!isSilent) showToast('⚠️ इंटरनेट उपलब्ध नाही. इंटरनेट सुरू झाल्यावर डेटा आपोआप सेव्ह होईल.');
+          return false;
+        }
+
+        this.config.status = 'syncing';
+        this.updateUIStatus();
+
+        const cleanBaseUrl = this.config.firebaseUrl.trim().replace(/\/$/, '');
+        const currentUdise = this.getSchoolUdise();
+        this.config.schoolCode = currentUdise;
+        const endpoint = `${cleanBaseUrl}/cashbook_schools/${this.getCloudKey()}.json`;
+
+        try {
+          let existingRemote = null;
+          try {
+            const checkRes = await fetch(endpoint);
+            if (checkRes.ok) {
+              existingRemote = await checkRes.json();
+            }
+          } catch (cErr) {
+            console.warn("Could not pre-check remote bucket:", cErr);
+          }
+
+          let localTxCount = 0;
+          (appData.accounts || []).forEach(acc => {
+            Object.values(acc.years || {}).forEach(yr => {
+              Object.values(yr.months || {}).forEach(m => {
+                localTxCount += (m.jama || []).length + (m.kharch || []).length;
+              });
+            });
+          });
+
+          let remoteTxCount = 0;
+          if (existingRemote && existingRemote.appData && existingRemote.appData.accounts) {
+            (existingRemote.appData.accounts || []).forEach(acc => {
+              Object.values(acc.years || {}).forEach(yr => {
+                Object.values(yr.months || {}).forEach(m => {
+                  remoteTxCount += (m.jama || []).length + (m.kharch || []).length;
+                });
+              });
+            });
+          }
+
+          // GUARD 1: Prevent blank device from overwriting non-empty remote database
+          if (localTxCount === 0 && remoteTxCount > 0) {
+            this.config.status = 'idle';
+            this.updateUIStatus();
+            const warnMsg = `⛔ डेटा सुरक्षा इशारा (डेटा नष्ट होण्यापासून रोखला!):\n\nया डिव्हाइसवर 0 व्यवहार नोंदी आहेत, तर क्लाऊडवर आधीच ${remoteTxCount} नोंदी सुरक्षित साठवलेल्या आहेत!\n\nकृपया प्रथम "📥 क्लाऊडवरून आणा" (Pull) बटण दाबा जेणेकरून क्लाऊडवरील सर्व डेटा या डिव्हाइसवर येईल.`;
+            if (!isSilent) alert(warnMsg);
+            else console.warn(warnMsg);
+            return false;
+          }
+
+          // GUARD 2: Smart Merge so PC and Mobile records merge without loss
+          if (existingRemote && existingRemote.appData && remoteTxCount > 0) {
+            this.mergeAppData(existingRemote.appData);
+            saveData();
+            refreshCurrentView();
+
+            try {
+              const backupEndpoint = `${cleanBaseUrl}/cashbook_backups/${this.getCloudKey()}_safety_backup.json`;
+              fetch(backupEndpoint, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(existingRemote)
+              }).catch(() => {});
+            } catch (bErr) {}
+          }
+
+          const payload = {
+            version: "2.0",
+            appType: "school_cashbook",
+            schoolCode: currentUdise,
+            schoolName: (appData.schoolInfo && appData.schoolInfo.name) || 'शाळा',
+            updatedAt: new Date().toISOString(),
+            updatedBy: (appData.schoolInfo && appData.schoolInfo.headmaster) || 'User',
+            appData: appData
+          };
+
+          const res = await fetch(endpoint, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            this.config.status = 'synced';
+            this.config.lastSyncTime = new Date().toISOString();
+            this.config.lastError = '';
+            this.saveConfig();
+            if (!isSilent) {
+              showToast('☁️ डेटा Google Firebase क्लाऊडवर सेव्ह झाला!');
+              alert(`☁️ डेटा Google Firebase वर यशस्वीरित्या सेव्ह झाला!\n\nशाळा UDISE: ${currentUdise}\n\nआता मोबाईलवर हे ॲप उघडून याच UDISE सह डेटा लाईव्ह दिसेल.`);
+            }
+            return true;
+          } else {
+            const errTxt = await res.text();
+            if (res.status === 401 || res.status === 403) {
+              throw new Error('Firebase Rules लॉक आहेत (401 Permission Denied). कृपया Firebase Console मध्ये Rules मध्ये ".read": true, ".write": true करा.');
+            }
+            throw new Error(`Firebase Error (${res.status}): ${errTxt.substring(0, 80)}`);
+          }
+        } catch (err) {
+          console.warn("Firebase push error:", err);
+          this.config.status = 'error';
+          this.config.lastError = err.message || 'सिंक त्रुटी';
+          this.updateUIStatus();
+          if (!isSilent) {
+            showToast(`⚠️ क्लाऊड सिंक त्रुटी: ${this.config.lastError}`);
+          }
+          return false;
+        } finally {
+          this.isSyncing = false;
+        }
+      },
+
+      async pullFromCloud(isSilent = false) {
+        if (!this.config.firebaseUrl) return false;
+        if (this.isSyncing) return false;
+        this.isSyncing = true;
+
+        if (!navigator.onLine) {
+          this.isSyncing = false;
+          this.config.status = 'offline';
+          this.updateUIStatus();
+          if (!isSilent) alert('इंटरनेट कनेक्शन बंद आहे. कृपया इंटरनेट चालू करा.');
+          return false;
+        }
+
+        this.config.status = 'syncing';
+        this.updateUIStatus();
+
+        const cleanBaseUrl = this.config.firebaseUrl.trim().replace(/\/$/, '');
+        const currentUdise = this.getSchoolUdise();
+        this.config.schoolCode = currentUdise;
+        const endpoint = `${cleanBaseUrl}/cashbook_schools/${this.getCloudKey()}.json`;
+
+        try {
+          const res = await fetch(endpoint);
+          if (res.ok) {
+            const json = await res.json();
+            if (json && json.appData && typeof json.appData === 'object') {
+              this.mergeAppData(json.appData);
+              saveData();
+              refreshCurrentView();
+
+              this.config.status = 'synced';
+              this.config.lastSyncTime = json.updatedAt || new Date().toISOString();
+              this.config.lastError = '';
+              this.saveConfig();
+
+              if (!isSilent) {
+                showToast('🎉 Google Firebase वरून डेटा डाऊनलोड झाला!');
+                alert(`🎉 Google Cloud वरून कॅश बुक डेटा यशस्वीरित्या डाऊनलोड झाला!\n\nशाळा UDISE: ${currentUdise}\nसर्व खाती व व्यवहार नोंदी अद्ययावत झाल्या आहेत.`);
+              }
+              return true;
+            } else {
+              this.config.status = 'idle';
+              this.updateUIStatus();
+              if (!isSilent) {
+                alert(`⚠️ Firebase वर या शाळेचा (UDISE: ${currentUdise}) कोणताही डेटा सापडला नाही!\n\nदुरुस्ती कशी करावी:\n1. प्रथम ज्या डिव्हाइसवर आधी डेटा भरला आहे त्यावर ॲप उघडा.\n2. "☁️ आता क्लाऊडवर सेव्ह करा" दाबा.\n3. नंतर या डिव्हाइसवर "📥 क्लाऊडवरून आणा" दाबा.`);
+              }
+              return false;
+            }
+          } else {
+            if (res.status === 401 || res.status === 403) {
+              throw new Error('Firebase Rules लॉक आहेत (401 Permission Denied). कृपया Rules मध्ये ".read": true, ".write": true करा.');
+            }
+            throw new Error(`Firebase Server returned ${res.status}`);
+          }
+        } catch (err) {
+          console.warn("Firebase pull error:", err);
+          this.config.status = 'error';
+          this.config.lastError = err.message;
+          this.updateUIStatus();
+          if (!isSilent) {
+            alert(`⚠️ क्लाऊडवरून डेटा आणताना त्रुटी आली:\n${this.config.lastError}`);
+          }
+          return false;
+        } finally {
+          this.isSyncing = false;
+        }
+      },
+
+      mergeAppData(remoteAppData) {
+        if (!remoteAppData) return;
+
+        // 1. School Info
+        if (remoteAppData.schoolInfo) {
+          appData.schoolInfo = Object.assign({}, remoteAppData.schoolInfo, appData.schoolInfo);
+        }
+
+        // 2. Accounts
+        const localAccounts = appData.accounts || [];
+        const remoteAccounts = remoteAppData.accounts || [];
+
+        remoteAccounts.forEach(rAcc => {
+          let lAcc = localAccounts.find(a => a.id === rAcc.id || a.name === rAcc.name);
+          if (!lAcc) {
+            localAccounts.push(rAcc);
+          } else {
+            lAcc.bankName = lAcc.bankName || rAcc.bankName;
+            lAcc.accountNo = lAcc.accountNo || rAcc.accountNo;
+            lAcc.ifsc = lAcc.ifsc || rAcc.ifsc;
+
+            // Merge years
+            lAcc.years = lAcc.years || {};
+            const rYears = rAcc.years || {};
+            Object.keys(rYears).forEach(yKey => {
+              if (!lAcc.years[yKey]) {
+                lAcc.years[yKey] = rYears[yKey];
+              } else {
+                const lY = lAcc.years[yKey];
+                const rY = rYears[yKey];
+
+                // Merge heads
+                const lHeads = lY.heads || [];
+                const rHeads = rY.heads || [];
+                rHeads.forEach(rh => {
+                  const lh = lHeads.find(h => h.id === rh.id || h.name === rh.name);
+                  if (!lh) {
+                    lHeads.push(rh);
+                  }
+                });
+                lY.heads = lHeads;
+
+                // Merge months
+                lY.months = lY.months || {};
+                const rMonths = rY.months || {};
+                Object.keys(rMonths).forEach(mKey => {
+                  if (!lY.months[mKey]) {
+                    lY.months[mKey] = rMonths[mKey];
+                  } else {
+                    const lM = lY.months[mKey];
+                    const rM = rMonths[mKey];
+
+                    // Merge Jama
+                    lM.jama = lM.jama || [];
+                    const rJama = rM.jama || [];
+                    rJama.forEach(rtx => {
+                      const exists = lM.jama.some(ltx => ltx.id === rtx.id || (ltx.date === rtx.date && ltx.amount === rtx.amount && ltx.details === rtx.details));
+                      if (!exists) lM.jama.push(rtx);
+                    });
+
+                    // Merge Kharch
+                    lM.kharch = lM.kharch || [];
+                    const rKharch = rM.kharch || [];
+                    rKharch.forEach(rtx => {
+                      const exists = lM.kharch.some(ltx => ltx.id === rtx.id || (ltx.date === rtx.date && ltx.amount === rtx.amount && ltx.details === rtx.details));
+                      if (!exists) lM.kharch.push(rtx);
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+
+        appData.accounts = localAccounts;
+      },
+
+      async testFirebaseConnection(customUrl) {
+        const url = customUrl || (document.getElementById('cloudFirebaseUrl') ? document.getElementById('cloudFirebaseUrl').value.trim() : this.config.firebaseUrl);
+        if (!url || !url.startsWith('http')) {
+          alert('कृपया वैध Firebase Realtime Database URL प्रविष्ट करा (उदा. https://your-project-default-rtdb.firebaseio.com/)');
+          return false;
+        }
+        if (url.includes('console.firebase.google.com')) {
+          alert('⚠️ तुम्ही Firebase Console ची लिंक टाकली आहे!\n\nकृपया Realtime Database ची URL टाका.\nउदा. https://your-project-default-rtdb.firebaseio.com/');
+          return false;
+        }
+
+        const cleanBaseUrl = url.trim().replace(/\/$/, '');
+        const testEndpoint = `${cleanBaseUrl}/cashbook_schools/test_ping.json`;
+
+        try {
+          const res = await fetch(testEndpoint, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ping: "ok", app: "cashbook", timestamp: new Date().toISOString() })
+          });
+
+          if (res.ok) {
+            alert('✅ अभिनंदन! Google Firebase Cloud Database यशस्वीरित्या कनेक्ट झाला!\n\nआता खालील "💾 सेव्ह करा व सुरू करा" बटण दाबा.');
+            return true;
+          } else if (res.status === 401 || res.status === 403) {
+            alert('⚠️ Firebase परवानगी त्रुटी (Permission Denied - Error 401/403):\n\nतुमच्या Firebase Database चे Rules लॉक आहेत!\n\nदुरुस्ती कशी करावी:\n1. Firebase Console उघडा.\n2. Realtime Database -> Rules वर जा.\n3. Rules मध्ये ".read": true, ".write": true टाकून "Publish" करा.');
+            return false;
+          } else {
+            alert(`⚠️ Firebase कनेक्ट होऊ शकले नाही (${res.status}). कृपया Firebase Database URL तपासा.`);
+            return false;
+          }
+        } catch (err) {
+          alert(`⚠️ Firebase कनेक्शन त्रुटी: ${err.message}\n\nकृपया इंटरनेट चालू आहे का आणि बरोबर Realtime Database URL टाकली आहे का ते तपासा.`);
+          return false;
+        }
+      },
+
+      async restoreFromCloudBackup() {
+        if (!this.config.firebaseUrl) {
+          alert('कृपया प्रथम Firebase URL प्रविष्ट करा.');
+          return false;
+        }
+        const cleanBaseUrl = this.config.firebaseUrl.trim().replace(/\/$/, '');
+        const backupEndpoint = `${cleanBaseUrl}/cashbook_backups/${this.getCloudKey()}_safety_backup.json`;
+
+        try {
+          const res = await fetch(backupEndpoint);
+          if (res.ok) {
+            const json = await res.json();
+            if (json && json.appData) {
+              if (confirm(`सुरक्षित क्लाऊड बॅकअप सापडला (तारीख: ${this.formatTimeStr(json.updatedAt)}).\n\nहा डेटा त्वरित रिस्टोअर करायचा का?`)) {
+                appData = json.appData;
+                saveData();
+                refreshCurrentView();
+                await this.pushToCloud(true);
+                alert(`🎉 क्लाऊड बॅकअप यशस्वीरित्या रिस्टोअर झाला!`);
+                return true;
+              }
+            }
+          }
+          alert('क्लाऊडवर कोणताही जुना सुरक्षित बॅकअप सापडला नाही.');
+          return false;
+        } catch (e) {
+          alert('क्लाऊड बॅकअप शोधताना त्रुटी आली: ' + e.message);
+          return false;
+        }
+      },
+
+      disableCloudSync() {
+        this.config.enabled = false;
+        this.config.status = 'idle';
+        this.config.lastError = '';
+        this.saveConfig();
+        closeModal('cloudSyncModal');
+        showToast('क्लाऊड सिंक बंद करण्यात आले.');
+      },
+
+      shareFullDataViaWhatsApp() {
+        const schoolName = (appData.schoolInfo && appData.schoolInfo.name) || 'शाळा';
+        const udise = this.getSchoolUdise();
+
+        const jsonStr = JSON.stringify(appData);
+        const encoded = encodeURIComponent(btoa(unescape(encodeURIComponent(jsonStr))));
+        const baseUrl = window.location.href.split('?')[0];
+        const directLink = `${baseUrl}?cashbook_import=${encoded}`;
+
+        const dNow = new Date();
+        const dateStr = String(dNow.getDate()).padStart(2, '0') + '/' + String(dNow.getMonth() + 1).padStart(2, '0') + '/' + dNow.getFullYear();
+        const msg = `🏫 *शाळा सादील खर्च व कॅश बुक प्रणाली*\n🏫 *शाळा:* ${schoolName}\n🆔 *UDISE कोड:* ${udise}\n📅 *तारीख:* ${dateStr}\n\n📲 *मोबाईल किंवा कॉम्प्युटरवर हा संपूर्ण डेटा 1-क्लिकमध्ये उघडण्यासाठी खालील लिंक दाबा:*\n${directLink}`;
+        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
+      },
+
+      checkUrlParamsForDataImport() {
+        try {
+          if (typeof window === 'undefined' || !window.location || !window.location.search) return;
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.has('cashbook_import')) {
+            const raw = urlParams.get('cashbook_import');
+            if (raw) {
+              const jsonStr = decodeURIComponent(escape(atob(decodeURIComponent(raw))));
+              const importedData = JSON.parse(jsonStr);
+              if (importedData && importedData.accounts) {
+                this.mergeAppData(importedData);
+                saveData();
+                refreshCurrentView();
+
+                if (window.history && window.history.replaceState) {
+                  window.history.replaceState({}, document.title, window.location.pathname);
+                }
+                setTimeout(() => {
+                  showToast('🎉 WhatsApp द्वारे शाळा कॅश बुक डेटा यशस्वीरित्या आयात झाला!');
+                }, 600);
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("Could not import data from URL params:", e);
+        }
+      },
+
+      formatTimeStr(isoString) {
+        if (!isoString) return 'कधीच नाही';
+        const t = new Date(isoString);
+        if (isNaN(t.getTime())) return 'कधीच नाही';
+        let hrs = t.getHours();
+        const mins = String(t.getMinutes()).padStart(2, '0');
+        const ampm = hrs >= 12 ? 'PM' : 'AM';
+        hrs = hrs % 12 || 12;
+        return `${hrs}:${mins} ${ampm}`;
+      },
+
+      updateUIStatus() {
+        this.config.schoolCode = this.getSchoolUdise();
+        const pill = document.getElementById('cloudStatusPill');
+        const dot = document.getElementById('cloudStatusDot');
+        const text = document.getElementById('cloudStatusText');
+
+        if (pill && dot && text) {
+          if (!this.config.enabled) {
+            dot.className = 'status-dot';
+            text.textContent = '☁️ सिंक: ऑफलाईन';
+          } else if (this.config.status === 'syncing') {
+            dot.className = 'status-dot syncing';
+            text.textContent = '🔄 सिंक होत आहे...';
+          } else if (this.config.status === 'synced') {
+            dot.className = 'status-dot synced';
+            const timeStr = this.formatTimeStr(this.config.lastSyncTime);
+            text.textContent = `☁️ सिंक चालू (${timeStr})`;
+          } else if (this.config.status === 'offline') {
+            dot.className = 'status-dot offline';
+            text.textContent = '⚠️ सिंक: इंटरनेट नाही';
+          } else {
+            dot.className = 'status-dot error';
+            text.textContent = '⚠️ सिंक त्रुटी';
+          }
+        }
+
+        const modalStatus = document.getElementById('cloudModalStatusText');
+        if (modalStatus) {
+          if (this.config.enabled) {
+            if (this.config.firebaseUrl && this.config.status === 'synced') {
+              modalStatus.innerHTML = `<span class="badge-sync badge-sync-success">✅ Google Firebase क्लाऊड सिंक सक्रिय</span> (शाळा: <code>${this.config.schoolCode}</code>) <br><small style="color: #15803d; font-weight: 600;">शेवटचा सिंक: ${this.formatTimeStr(this.config.lastSyncTime)}</small>`;
+            } else if (this.config.status === 'error') {
+              modalStatus.innerHTML = `<span class="badge-sync badge-sync-danger">⚠️ त्रुटी: ${this.config.lastError || 'कनेक्शन अयशस्वी'}</span>`;
+            } else if (this.config.status === 'syncing') {
+              modalStatus.innerHTML = `<span class="badge-sync badge-sync-warning">🔄 सिंक सुरू आहे...</span>`;
+            } else {
+              modalStatus.innerHTML = `<span class="badge-sync badge-sync-success">✅ सिंक सक्रिय</span> (शाळा: <code>${this.config.schoolCode}</code>)`;
+            }
+          } else {
+            modalStatus.innerHTML = `<span class="badge-sync badge-sync-secondary">❌ सिंक बंद आहे (डेटा फक्त या डिव्हाइसवर साठवला आहे)</span>`;
+          }
+        }
+
+        const tabBackupStatus = document.getElementById('tabBackupSyncStatusBox');
+        if (tabBackupStatus) {
+          if (this.config.enabled && this.config.firebaseUrl) {
+            tabBackupStatus.innerHTML = `
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <strong style="color: #15803d;">✅ Google Firebase लाईव्ह ऑटो-सिंक चालू आहे</strong><br>
+                  <small style="color: #475569;">UDISE कोड: <strong>${this.config.schoolCode}</strong> | शेवटचा सिंक: <strong>${this.formatTimeStr(this.config.lastSyncTime)}</strong></small>
+                </div>
+                <span class="badge-sync ${this.config.status === 'synced' ? 'badge-sync-success' : (this.config.status === 'syncing' ? 'badge-sync-warning' : 'badge-sync-danger')}">
+                  ${this.config.status === 'synced' ? '🟢 सिंक पूर्ण' : (this.config.status === 'syncing' ? '🟡 सिंक होत आहे' : '🔴 त्रुटी / ऑफलाईन')}
+                </span>
+              </div>
+            `;
+          } else {
+            tabBackupStatus.innerHTML = `
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <strong style="color: #475569;">⚪ Google Firebase क्लाऊड सिंक सध्या बंद आहे</strong><br>
+                  <small style="color: #64748b;">मोबाईल व लॅपटॉपवर एकाच वेळी लाईव्ह डेटा सिंक करण्यासाठी वर 'सिंक सेटिंग्ज' बटण दाबा.</small>
+                </div>
+                <span class="badge-sync badge-sync-secondary">बंद</span>
+              </div>
+            `;
+          }
+        }
+      }
+    };
+
+    function openCloudSyncModal() {
+      const codeInput = document.getElementById('cloudSchoolCode');
+      const pinInput = document.getElementById('cloudSecretPin');
+      const fbInput = document.getElementById('cloudFirebaseUrl');
+
+      if (codeInput) codeInput.value = (cloudSync.config.schoolCode || (appData.schoolInfo && appData.schoolInfo.udise) || '27240801201');
+      if (pinInput) pinInput.value = (cloudSync.config.secretPin || 'Ican@123');
+      if (fbInput) fbInput.value = (cloudSync.config.firebaseUrl || '');
+
+      const banner = document.getElementById('mdmAutoDetectedBanner');
+      if (banner) {
+        const mdmSaved = safeStorage.getItem('MDM_CLOUD_SYNC_CONFIG');
+        if (mdmSaved && !cloudSync.config.firebaseUrl) {
+          try {
+            const m = JSON.parse(mdmSaved);
+            if (m && m.firebaseUrl) {
+              fbInput.value = m.firebaseUrl;
+              banner.style.display = 'block';
+            }
+          } catch (e) {}
+        } else {
+          banner.style.display = 'none';
+        }
+      }
+
+      cloudSync.updateUIStatus();
+      openModal('cloudSyncModal');
+    }
+
+    async function saveCloudSyncSettingsModal() {
+      const code = document.getElementById('cloudSchoolCode').value.trim();
+      const pin = document.getElementById('cloudSecretPin').value.trim();
+      const fbUrl = document.getElementById('cloudFirebaseUrl').value.trim();
+
+      if (!code || code.length < 3) {
+        alert('कृपया शाळेचा UDISE क्रमांक टाका.');
+        return;
+      }
+
+      cloudSync.config.enabled = true;
+      cloudSync.config.schoolCode = code;
+      cloudSync.config.secretPin = pin || 'Ican@123';
+      cloudSync.config.firebaseUrl = fbUrl;
+      cloudSync.config.autoSync = true;
+      cloudSync.config.lastError = '';
+      cloudSync.saveConfig();
+
+      closeModal('cloudSyncModal');
+
+      if (fbUrl) {
+        await cloudSync.pushToCloud(false);
+      } else {
+        showToast('✅ शाळा कोड सेट झाला! आता WhatsApp 1-क्लिक सिंक वापरू शकता.');
+      }
+    }
+
     function initApp() {
       loadData();
+      cloudSync.init();
       refreshCurrentView();
       switchTab('heads');
 
