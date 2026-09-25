@@ -8,7 +8,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="शाळा कॅश बुक" />
-  <link rel="manifest" href='data:application/manifest+json,{"name":"शाळा सादील व कॅश बुक प्रणाली","short_name":"कॅश बुक","start_url":".","display":"standalone","background_color":"#f8fafc","theme_color":"#1e3a8a","orientation":"portrait-primary"}' />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>शाळा बहु-खाते सादील खर्च व कॅश बुक व्यवस्थापन प्रणाली</title>
 
   <!-- Google Fonts: Kalam (Handwriting) & Yantramanav / Noto Sans Devanagari -->
@@ -73,7 +75,13 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .brand-section {
@@ -88,6 +96,13 @@
       background: rgba(255,255,255,0.18);
       padding: 6px 10px;
       border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .brand-text-container {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
     }
 
     .brand-title {
@@ -99,6 +114,31 @@
     .brand-sub {
       font-size: 0.8rem;
       color: #bfdbfe;
+    }
+
+    .header-quick-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-school-nav {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.35);
+      color: #ffffff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-school-nav:hover {
+      background: rgba(255,255,255,0.26);
     }
 
     .top-controls {
@@ -701,14 +741,14 @@
 
     /* ==================== MOBILE APP-LIKE UI STYLES (iOS & Android Native Feel) ==================== */
     @media (max-width: 768px) {
-      /* 1. App Header: Compact native app bar */
+      /* 1. App Header: 2-Tier Native Mobile Layout */
       .navbar {
         position: sticky !important;
         top: 0 !important;
         z-index: 100 !important;
         background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%) !important;
         color: #ffffff !important;
-        padding: 8px 12px !important;
+        padding: 7px 10px !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
       }
       .nav-container {
@@ -716,45 +756,124 @@
         align-items: stretch !important;
         gap: 6px !important;
       }
+
+      /* Tier 1: School Name on Left + School Edit & Cloud Sync on Right */
+      .brand-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        gap: 6px !important;
+      }
       .brand-section {
         display: flex !important;
         align-items: center !important;
-        justify-content: space-between !important;
-        width: 100% !important;
+        gap: 6px !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+        cursor: pointer;
       }
-      .brand-section .logo-box {
-        font-size: 1.25rem !important;
-        margin-right: 6px !important;
+      .brand-icon {
+        font-size: 1.3rem !important;
+        padding: 3px 6px !important;
+        border-radius: 6px !important;
+        background: rgba(255,255,255,0.18) !important;
+        flex-shrink: 0 !important;
       }
-      .brand-section h1 {
-        font-size: 0.98rem !important;
+      .brand-text-container {
+        min-width: 0 !important;
+        flex: 1 !important;
+        overflow: hidden !important;
+      }
+      .brand-title {
+        font-size: 0.92rem !important;
         font-weight: 700 !important;
+        color: #ffffff !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        max-width: 220px !important;
+        line-height: 1.2 !important;
+      }
+      .brand-sub {
+        font-size: 0.7rem !important;
+        color: #93c5fd !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        line-height: 1.2 !important;
+        margin-top: 1px !important;
+      }
+      .header-quick-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        flex-shrink: 0 !important;
+      }
+      .btn-school-nav {
+        display: inline-flex !important;
+        padding: 4px 8px !important;
+        font-size: 0.76rem !important;
+        font-weight: 700 !important;
+        border-radius: 6px !important;
+        background: rgba(255, 255, 255, 0.22) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
         color: #ffffff !important;
+        white-space: nowrap !important;
+        touch-action: manipulation;
       }
-      .brand-section p {
-        display: none !important;
+      .btn-school-nav:active {
+        transform: scale(0.95);
       }
+      .cloud-pill {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        padding: 4px 8px !important;
+        font-size: 0.74rem !important;
+        white-space: nowrap !important;
+        border-radius: 6px !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.35) !important;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+      .cloud-pill .status-dot {
+        width: 7px;
+        height: 7px;
+      }
+
+      /* Tier 2: Account (60%) and Year (40%) Side-by-Side */
       .top-controls {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr auto !important;
+        display: flex !important;
+        width: 100% !important;
         gap: 6px !important;
         align-items: center !important;
-        width: 100% !important;
+      }
+      .ctrl-account {
+        flex: 1.45 !important;
+        min-width: 0 !important;
+      }
+      .ctrl-year {
+        flex: 1 !important;
+        min-width: 0 !important;
       }
       .ctrl-group {
         background: rgba(255, 255, 255, 0.16) !important;
         border-radius: 8px !important;
-        padding: 4px 6px !important;
+        padding: 3px 5px !important;
         border: 1px solid rgba(255, 255, 255, 0.25) !important;
         display: flex !important;
         align-items: center !important;
+        gap: 3px !important;
+        min-width: 0 !important;
       }
       .ctrl-group label {
-        display: none !important;
+        font-size: 0.72rem !important;
+        color: #e2e8f0 !important;
+        white-space: nowrap !important;
+        font-weight: 700 !important;
+        flex-shrink: 0 !important;
+        display: inline !important;
       }
       .ctrl-group select {
         background: transparent !important;
@@ -762,37 +881,28 @@
         border: none !important;
         font-size: 0.82rem !important;
         font-weight: 600 !important;
-        padding: 2px 0 !important;
+        padding: 3px 1px !important;
         width: 100% !important;
+        min-width: 0 !important;
         outline: none !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
       }
       .ctrl-group select option {
         background: #ffffff !important;
         color: #0f172a !important;
+        font-size: 0.88rem !important;
       }
       .ctrl-group .btn {
         display: inline-flex !important;
-        padding: 4px 8px !important;
-        font-size: 0.85rem !important;
-        border-radius: 6px !important;
-        margin-left: 4px !important;
-        align-items: center !important;
-        justify-content: center !important;
-        background: rgba(255, 255, 255, 0.25) !important;
-        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        padding: 3px 6px !important;
+        font-size: 0.8rem !important;
+        border-radius: 5px !important;
+        flex-shrink: 0 !important;
+        background: rgba(255, 255, 255, 0.28) !important;
+        border: 1px solid rgba(255, 255, 255, 0.45) !important;
         color: #ffffff !important;
-      }
-      .cloud-pill {
-        padding: 6px 10px !important;
-        font-size: 0.78rem !important;
-        white-space: nowrap !important;
-        border-radius: 8px !important;
-        background: rgba(255, 255, 255, 0.2) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        cursor: pointer;
-      }
-      .top-controls > button.btn-outline {
-        display: none !important;
       }
 
       /* 2. Hide Top Desktop Tabs Bar on Mobile (rely on bottom dock) */
@@ -1154,18 +1264,33 @@
   <!-- Top Navigation Bar -->
   <header class="navbar no-print">
     <div class="nav-container">
-      <div class="brand-section" onclick="switchTab('heads')">
-        <div class="brand-icon">🏫</div>
-        <div>
-          <div class="brand-title" id="displaySchoolName">शाळा सादील खर्च व कॅश बुक प्रणाली</div>
-          <div class="brand-sub" id="displaySchoolSub">महाराष्ट्र प्राथमिक/माध्यमिक शाळा हिशोब</div>
+      <!-- Row 1: Brand & School Actions -->
+      <div class="brand-row">
+        <div class="brand-section" onclick="openSchoolModal()" title="शाळेची माहिती पहा किंवा संपादित करा">
+          <div class="brand-icon">🏫</div>
+          <div class="brand-text-container">
+            <div class="brand-title" id="displaySchoolName">शाळा सादील खर्च व कॅश बुक प्रणाली</div>
+            <div class="brand-sub" id="displaySchoolSub">महाराष्ट्र प्राथमिक/माध्यमिक शाळा हिशोब</div>
+          </div>
+        </div>
+
+        <div class="header-quick-actions">
+          <button class="btn-school-nav" onclick="openSchoolModal()" title="शाळेची सर्व माहिती बदला / UDISE">
+            ✏️ <span class="nav-text">शाळा माहिती</span>
+          </button>
+          <!-- Cloud Sync Status Pill -->
+          <div class="cloud-pill" id="cloudStatusPill" onclick="switchTab('firebase')" title="Google Firebase लाईव्ह क्लाऊड सिंक नियंत्रण">
+            <span id="cloudStatusDot" class="status-dot"></span>
+            <span id="cloudStatusText">☁️ सिंक</span>
+          </div>
         </div>
       </div>
 
+      <!-- Row 2: Account and Year Selectors -->
       <div class="top-controls">
         <!-- Account Selector -->
-        <div class="ctrl-group">
-          <label for="selectAccount">📂 बँक खाते:</label>
+        <div class="ctrl-group ctrl-account">
+          <label for="selectAccount">📂 खाते:</label>
           <select id="selectAccount" onchange="changeAccount(this.value)">
             <!-- Populated dynamically -->
           </select>
@@ -1173,23 +1298,13 @@
         </div>
 
         <!-- Year Selector -->
-        <div class="ctrl-group">
+        <div class="ctrl-group ctrl-year">
           <label for="selectYear">📅 वर्ष:</label>
           <select id="selectYear" onchange="changeYear(this.value)">
             <!-- Populated dynamically -->
           </select>
           <button class="btn btn-sm btn-success" onclick="openNewYearModal()" title="नवीन वर्ष जोडा">➕</button>
         </div>
-
-        <!-- Cloud Sync Status Pill -->
-        <div class="cloud-pill" id="cloudStatusPill" onclick="switchTab('firebase')" title="Google Firebase लाईव्ह क्लाऊड सिंक नियंत्रण">
-          <span id="cloudStatusDot" class="status-dot"></span>
-          <span id="cloudStatusText">☁️ सिंक: ऑफलाईन</span>
-        </div>
-
-        <button class="btn btn-outline btn-sm" onclick="openSchoolModal()" title="शाळेची माहिती बदला">
-          ✏️ शाळेची माहिती
-        </button>
       </div>
     </div>
   </header>
@@ -1210,7 +1325,7 @@
         📊 4. अंतिम ताळेबंद
       </button>
       <button class="tab-btn" onclick="switchTab('backup')">
-        💾 5. डेटा बॅकअप
+        🏫 5. शाळा माहिती व बॅकअप
       </button>
       <button class="tab-btn" onclick="switchTab('firebase')">
         ☁️ 6. Firebase सिंक
@@ -1511,6 +1626,20 @@
 
     <!-- ==================== TAB 5: BACKUP & SETTINGS ==================== -->
     <section id="tab-backup" class="tab-pane">
+      <!-- 1. School Information Card -->
+      <div class="card" style="border-top: 4px solid #1e3a8a;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div class="card-title">🏫 शाळेची अधिकृत माहिती (School Information)</div>
+          <button class="btn btn-primary btn-sm" onclick="openSchoolModal()">✏️ माहिती संपादित करा (Edit)</button>
+        </div>
+        <p style="color: #64748b; font-size: 0.84rem; margin-bottom: 12px;">
+          येथे नोंदवलेला UDISE कोड, शाळेचे नाव, केंद्र व पत्ते Google Firebase क्लाऊडवर आपोआप सुरक्षित सिंक होतात.
+        </p>
+        <div id="schoolInfoDisplayCard" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 6px;">
+          <!-- Dynamically populated by renderSchoolInfoCard() -->
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-header">
           <div class="card-title">💾 डेटा बॅकअप व सुरक्षितता</div>
@@ -1600,6 +1729,22 @@
         </div>
       </div>
 
+      <!-- 1-Click Mobile Connect Card -->
+      <div class="card" style="background: #eff6ff; border: 1.5px solid #93c5fd;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+          <div class="card-title" style="color: #1e3a8a;">📱 मोबाईलवर थेट सिंक सुरू करा (1-Click Easy Link)</div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="firebaseSync.copyMobileShareLink()">
+            📲 1-Click सिंक लिंक कॉपी करा
+          </button>
+        </div>
+        <p style="color: #1e40af; font-size: 0.85rem; margin-bottom: 6px;">
+          मोबाईलवर मोठी Firebase Database URL टाईप करण्याची गरज नाही! वरील बटण दाबून लिंक कॉपी करा व स्वतःला WhatsApp वर पाठवा. मोबाईलवर ती लिंक उघडताच मोबाईल आणि संगणक आपोआप एकमेकांशी जोडले जातील!
+        </p>
+        <div id="mobileLinkCopyNotice" style="display: none; color: #15803d; font-weight: bold; font-size: 0.84rem; background: #dcfce7; padding: 6px 12px; border-radius: 6px; margin-top: 6px;">
+          ✅ लिंक कॉपी झाली! आता ही लिंक मोबाईलच्या WhatsApp वर पाठवून मोबाईलमध्ये Chrome ब्राऊझरमध्ये उघडा.
+        </div>
+      </div>
+
       <!-- 2. Direct Sync Actions Card -->
       <div class="card">
         <div class="card-header">
@@ -1679,8 +1824,8 @@
       <span class="nav-label">सिंक</span>
     </button>
     <button type="button" class="mobile-nav-item" onclick="switchTab('backup')" data-tab="backup">
-      <span class="nav-icon">⚙️</span>
-      <span class="nav-label">बॅकअप</span>
+      <span class="nav-icon">🏫</span>
+      <span class="nav-label">शाळा माहिती</span>
     </button>
   </nav>
 
@@ -2488,52 +2633,101 @@
 
     // UI RENDERERS
     function renderHeaderInfo() {
-      const s = appData.schoolInfo;
-      document.getElementById("displaySchoolName").innerText = s.name || "शाळा सादील खर्च व कॅश बुक";
-      let sub = "";
-      if (s.center) sub += `केंद्र: ${s.center} | `;
-      if (s.taluka) sub += `ता: ${s.taluka} | `;
-      if (s.district) sub += `जि: ${s.district}`;
-      document.getElementById("displaySchoolSub").innerText = sub || "कॅश बुक व्यवस्थापन प्रणाली";
+      const s = appData.schoolInfo || {};
+      const nameEl = document.getElementById("displaySchoolName");
+      if (nameEl) {
+        nameEl.innerText = s.name || "शाळा सादील खर्च व कॅश बुक";
+        nameEl.title = s.name || "शाळा सादील खर्च व कॅश बुक";
+      }
+
+      let subParts = [];
+      const udiseVal = s.udise || (typeof firebaseSync !== 'undefined' ? firebaseSync.config.schoolCode : '');
+      if (udiseVal) subParts.push(`UDISE: ${udiseVal}`);
+      if (s.center && s.center !== "केंद्र") subParts.push(`केंद्र: ${s.center}`);
+      if (s.taluka && s.taluka !== "तालुका") subParts.push(`ता: ${s.taluka}`);
+      if (s.district && s.district !== "जिल्हा") subParts.push(`जि: ${s.district}`);
+      if (s.headmaster && s.headmaster !== "मुख्याध्यापक") subParts.push(`मु.अ.: ${s.headmaster}`);
+
+      const subEl = document.getElementById("displaySchoolSub");
+      if (subEl) {
+        const subTxt = subParts.length > 0 ? subParts.join(" | ") : "महाराष्ट्र शाळा कॅश बुक प्रणाली";
+        subEl.innerText = subTxt;
+        subEl.title = subTxt;
+      }
 
       const accSelect = document.getElementById("selectAccount");
-      accSelect.innerHTML = "";
-      appData.accounts.forEach(a => {
-        const opt = document.createElement("option");
-        opt.value = a.id;
-        opt.innerText = a.name;
-        if (a.id === appData.currentAccountId) opt.selected = true;
-        accSelect.appendChild(opt);
-      });
+      if (accSelect) {
+        accSelect.innerHTML = "";
+        (appData.accounts || []).forEach(a => {
+          const opt = document.createElement("option");
+          opt.value = a.id;
+          opt.innerText = a.name;
+          if (a.id === appData.currentAccountId) opt.selected = true;
+          accSelect.appendChild(opt);
+        });
+      }
 
       const curAcc = getCurrentAccount();
       const yrSelect = document.getElementById("selectYear");
-      yrSelect.innerHTML = "";
-      
-      // Standard financial years list + any custom years in this account
-      const standardYears = ["2023-24", "2024-25", "2025-26", "2026-27"];
-      const allYearSet = new Set([...standardYears, ...Object.keys(curAcc.years || {})]);
-      const sortedYears = Array.from(allYearSet).sort();
+      if (yrSelect) {
+        yrSelect.innerHTML = "";
+        
+        // Standard financial years list + any custom years in this account
+        const standardYears = ["2023-24", "2024-25", "2025-26", "2026-27"];
+        const allYearSet = new Set([...standardYears, ...Object.keys(curAcc.years || {})]);
+        const sortedYears = Array.from(allYearSet).sort();
 
-      sortedYears.forEach(y => {
-        const opt = document.createElement("option");
-        opt.value = y;
-        let suffix = "";
-        if (y === "2024-25") suffix = " (2024-25)";
-        else if (y === "2025-26") suffix = " (2025-26)";
-        opt.innerText = y + suffix;
-        if (y === appData.currentYear) opt.selected = true;
-        yrSelect.appendChild(opt);
-      });
+        sortedYears.forEach(y => {
+          const opt = document.createElement("option");
+          opt.value = y;
+          opt.innerText = y; // Clean year without duplicate suffix!
+          if (y === appData.currentYear) opt.selected = true;
+          yrSelect.appendChild(opt);
+        });
 
-      const addOpt = document.createElement("option");
-      addOpt.value = "__NEW_YEAR__";
-      addOpt.innerText = "➕ नवीन वर्ष जोडा...";
-      yrSelect.appendChild(addOpt);
+        const addOpt = document.createElement("option");
+        addOpt.value = "__NEW_YEAR__";
+        addOpt.innerText = "➕ नवीन वर्ष जोडा...";
+        yrSelect.appendChild(addOpt);
+      }
 
       document.querySelectorAll(".activeYearText").forEach(el => {
         el.innerText = appData.currentYear;
       });
+
+      renderSchoolInfoCard();
+    }
+
+    function renderSchoolInfoCard() {
+      const container = document.getElementById("schoolInfoDisplayCard");
+      if (!container) return;
+      const s = appData.schoolInfo || {};
+      const udiseVal = s.udise || (typeof firebaseSync !== 'undefined' ? firebaseSync.config.schoolCode : '') || "नोंद नाही";
+      const isSynced = typeof firebaseSync !== 'undefined' && firebaseSync.config && firebaseSync.config.enabled && firebaseSync.config.status === 'synced';
+
+      container.innerHTML = `
+        <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+          <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block; text-transform: uppercase;">🏫 शाळेचे नाव</span>
+          <strong style="color: #1e3a8a; font-size: 0.95rem; display: block; margin-top: 3px;">${s.name || "शाळा सादील खर्च व कॅश बुक"}</strong>
+        </div>
+        <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+          <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block; text-transform: uppercase;">🔢 UDISE कोड (क्लाऊड सिंक आयडी)</span>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 3px;">
+            <strong style="color: #0f766e; font-size: 1rem; font-family: monospace;">${udiseVal}</strong>
+            <span style="font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; background: ${isSynced ? '#dcfce7; color: #15803d;' : '#f1f5f9; color: #475569;'}">${isSynced ? '🟢 लाईव्ह' : '⚪ सिंक'}</span>
+          </div>
+        </div>
+        <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+          <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block; text-transform: uppercase;">📍 केंद्र / तालुका / जिल्हा</span>
+          <span style="color: #334155; font-size: 0.88rem; font-weight: 600; display: block; margin-top: 3px;">
+            केंद्र: <strong>${s.center || "-"}</strong> | ता: <strong>${s.taluka || "-"}</strong> | जि: <strong>${s.district || "-"}</strong>
+          </span>
+        </div>
+        <div style="background: #ffffff; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.04);">
+          <span style="font-size: 0.72rem; color: #64748b; font-weight: 700; display: block; text-transform: uppercase;">👤 मुख्याध्यापक / प्रभारी</span>
+          <span style="color: #334155; font-size: 0.88rem; font-weight: 600; display: block; margin-top: 3px;">${s.headmaster || "-"}</span>
+        </div>
+      `;
     }
 
     function renderMonthsStrip() {
@@ -2855,6 +3049,7 @@
 
     // TAB 5: Backup Tab
     function renderBackupTab() {
+      renderSchoolInfoCard();
       const tbody = document.getElementById("allAccountsListBody");
       tbody.innerHTML = "";
       appData.accounts.forEach(a => {
@@ -3210,6 +3405,9 @@
       saveData();
       refreshCurrentView();
       showToast("नोंद हटवण्यात आली!");
+      if (typeof firebaseSync !== 'undefined' && firebaseSync.config && firebaseSync.config.enabled && firebaseSync.config.firebaseUrl) {
+        firebaseSync.forcePushData(true);
+      }
     }
 
     function openNewHeadModal() {
@@ -3375,28 +3573,49 @@
 
     function openSchoolModal() {
       const s = appData.schoolInfo || {};
+      const currentUdise = s.udise || (typeof firebaseSync !== 'undefined' ? firebaseSync.config.schoolCode : '') || "";
       document.getElementById("schoolNameInput").value = s.name || "";
       document.getElementById("schoolCenterInput").value = s.center || "";
       document.getElementById("schoolTalukaInput").value = s.taluka || "";
       document.getElementById("schoolDistrictInput").value = s.district || "";
-      document.getElementById("schoolUdiseInput").value = s.udise || "";
+      document.getElementById("schoolUdiseInput").value = currentUdise;
       document.getElementById("schoolHmInput").value = s.headmaster || "";
       openModal("schoolModal");
     }
 
     function saveSchoolInfo() {
+      const name = document.getElementById("schoolNameInput").value.trim();
+      const center = document.getElementById("schoolCenterInput").value.trim();
+      const taluka = document.getElementById("schoolTalukaInput").value.trim();
+      const district = document.getElementById("schoolDistrictInput").value.trim();
+      const udise = document.getElementById("schoolUdiseInput").value.trim();
+      const headmaster = document.getElementById("schoolHmInput").value.trim();
+
       appData.schoolInfo = {
-        name: document.getElementById("schoolNameInput").value.trim(),
-        center: document.getElementById("schoolCenterInput").value.trim(),
-        taluka: document.getElementById("schoolTalukaInput").value.trim(),
-        district: document.getElementById("schoolDistrictInput").value.trim(),
-        udise: document.getElementById("schoolUdiseInput").value.trim(),
-        headmaster: document.getElementById("schoolHmInput").value.trim()
+        name: name || "शाळा सादील खर्च व कॅश बुक",
+        center: center || "",
+        taluka: taluka || "",
+        district: district || "",
+        udise: udise || "",
+        headmaster: headmaster || ""
       };
+
+      if (udise && typeof firebaseSync !== 'undefined' && firebaseSync.config) {
+        firebaseSync.config.schoolCode = udise;
+        firebaseSync.saveConfig();
+        const fbCodeInput = document.getElementById("fbSchoolCodeInput");
+        if (fbCodeInput) fbCodeInput.value = udise;
+      }
+
       saveData();
       closeModal("schoolModal");
       refreshCurrentView();
-      showToast("शाळेची माहिती सेव्ह झाली!");
+
+      if (typeof firebaseSync !== 'undefined' && firebaseSync.config && firebaseSync.config.enabled && firebaseSync.config.firebaseUrl) {
+        firebaseSync.forcePushData(true);
+      }
+
+      showToast("शाळेची माहिती सेव्ह झाली व क्लाऊडवर सिंक केली!");
     }
 
     function exportDataToFile() {
@@ -3894,12 +4113,22 @@
       },
       isSyncing: false,
       debounceTimer: null,
+      pollTimer: null,
       STORAGE_KEY: 'CASHBOOK_FIREBASE_CONFIG',
 
       init() {
         this.loadConfig();
+        this.checkUrlParamsForSync();
         this.bindOnlineEvents();
+        this.startAutoPolling();
         this.updateUIStatus();
+
+        // Auto-pull on startup if Firebase is configured & enabled
+        if (this.config.enabled && this.config.firebaseUrl) {
+          setTimeout(() => {
+            this.pullData(true);
+          }, 800);
+        }
       },
 
       loadConfig() {
@@ -3915,13 +4144,58 @@
               if (mdmConfig && mdmConfig.firebaseUrl) {
                 this.config.firebaseUrl = mdmConfig.firebaseUrl;
                 if (mdmConfig.schoolCode) this.config.schoolCode = mdmConfig.schoolCode;
-                this.config.enabled = false;
+                this.config.enabled = true; // Auto-enable if MDM was configured!
+                this.config.autoSync = true;
                 this.config.status = 'idle';
               }
             }
           }
         } catch (e) {
           console.warn("Could not load Firebase config:", e);
+        }
+      },
+
+      checkUrlParamsForSync() {
+        try {
+          if (typeof window === 'undefined' || !window.location || !window.location.search) return;
+          const params = new URLSearchParams(window.location.search);
+          let changed = false;
+
+          if (params.has('fb_url')) {
+            const url = decodeURIComponent(params.get('fb_url')).trim();
+            if (url && url.startsWith('http')) {
+              this.config.firebaseUrl = url.replace(/\/$/, '') + '/';
+              this.config.enabled = true;
+              this.config.autoSync = true;
+              changed = true;
+            }
+          }
+
+          if (params.has('udise')) {
+            const code = decodeURIComponent(params.get('udise')).trim();
+            if (code) {
+              this.config.schoolCode = code;
+              if (appData && appData.schoolInfo) {
+                appData.schoolInfo.udise = code;
+              }
+              changed = true;
+            }
+          }
+
+          if (changed) {
+            this.config.lastError = '';
+            this.saveConfig();
+            safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            if (window.history && window.history.replaceState) {
+              window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            if (typeof showToast === 'function') showToast("🔗 1-Click मोबाईल Firebase सिंक सुरू झाले!");
+            setTimeout(() => {
+              this.pullData(false);
+            }, 600);
+          }
+        } catch (e) {
+          console.warn("Could not check URL params for sync:", e);
         }
       },
 
@@ -3951,6 +4225,21 @@
             this.updateUIStatus();
           }
         });
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible' && this.config.enabled && this.config.firebaseUrl && !this.isSyncing) {
+            this.pullData(true);
+          }
+        });
+      },
+
+      startAutoPolling() {
+        if (this.pollTimer) clearInterval(this.pollTimer);
+        // Periodic background poll every 12 seconds
+        this.pollTimer = setInterval(() => {
+          if (this.config.enabled && this.config.firebaseUrl && !this.isSyncing && (typeof document === 'undefined' || document.visibilityState === 'visible')) {
+            this.pullData(true);
+          }
+        }, 12000);
       },
 
       scheduleDebouncedPush() {
@@ -3966,8 +4255,8 @@
 
       getSchoolUdise() {
         return String(
-          this.config.schoolCode ||
           (appData && appData.schoolInfo && appData.schoolInfo.udise) ||
+          this.config.schoolCode ||
           '27240801201'
         ).trim();
       },
@@ -4002,13 +4291,13 @@
             text.textContent = '☁️ सिंक: ऑफलाईन';
           } else if (this.config.status === 'syncing') {
             dot.className = 'status-dot syncing';
-            text.textContent = '🔄 सिंक होत आहे...';
+            text.textContent = '🔄 सिंक सुरू...';
           } else if (this.config.status === 'synced') {
             dot.className = 'status-dot synced';
             text.textContent = `☁️ सिंक चालू (${this.formatTimeStr(this.config.lastSyncTime)})`;
           } else if (this.config.status === 'offline') {
             dot.className = 'status-dot offline';
-            text.textContent = '⚠️ इंटरनेट नाही';
+            text.textContent = '⚠️ नेट नाही';
           } else {
             dot.className = 'status-dot error';
             text.textContent = '⚠️ सिंक त्रुटी';
@@ -4089,6 +4378,32 @@
         }
       },
 
+      copyMobileShareLink() {
+        const url = this.config.firebaseUrl;
+        const code = this.getSchoolUdise();
+        if (!url) {
+          alert("कृपया प्रथम Firebase Database URL प्रविष्ट करा व सेव्ह करा!");
+          return;
+        }
+        const origin = window.location.origin + window.location.pathname;
+        const shareUrl = `${origin}?fb_url=${encodeURIComponent(url)}&udise=${encodeURIComponent(code)}&t=${Date.now()}`;
+        
+        const copyNotice = () => {
+          const notice = document.getElementById("mobileLinkCopyNotice");
+          if (notice) notice.style.display = "block";
+          if (typeof showToast === 'function') showToast("📲 1-Click मोबाईल लिंक कॉपी झाली!");
+          alert(`✅ 1-Click मोबाईल सिंक लिंक कॉपी झाली आहे!\n\nखालील लिंक तुमच्या WhatsApp वर पाठवा:\n\n${shareUrl}\n\nमोबाईलवर ही लिंक उघडताच Firebase सिंक आपोआप सुरू होईल!`);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(shareUrl).then(copyNotice).catch(() => {
+            prompt("खालील लिंक कॉपी करा व मोबाईलवर WhatsApp द्वारे पाठवा:", shareUrl);
+          });
+        } else {
+          prompt("खालील लिंक कॉपी करा व मोबाईलवर WhatsApp द्वारे पाठवा:", shareUrl);
+        }
+      },
+
       async testConnection() {
         const urlInput = document.getElementById('fbUrlInput');
         const url = (urlInput ? urlInput.value.trim() : '') || this.config.firebaseUrl;
@@ -4163,10 +4478,12 @@
         this.config.lastError = '';
         this.saveConfig();
 
-        if (typeof appData !== 'undefined' && appData && appData.schoolInfo) {
+        if (typeof appData !== 'undefined' && appData) {
+          if (!appData.schoolInfo) appData.schoolInfo = {};
           appData.schoolInfo.udise = code;
           safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
           if (typeof renderHeaderInfo === 'function') renderHeaderInfo();
+          if (typeof renderSchoolInfoCard === 'function') renderSchoolInfoCard();
         }
 
         if (typeof showToast === 'function') showToast('⚙️ Firebase सेटिंग्ज जतन झाल्या!');
@@ -4182,12 +4499,20 @@
           clearTimeout(this.debounceTimer);
           this.debounceTimer = null;
         }
+        if (this.pollTimer) {
+          clearInterval(this.pollTimer);
+          this.pollTimer = null;
+        }
         this.saveConfig();
         if (typeof showToast === 'function') showToast('❌ Firebase सिंक बंद करण्यात आले.');
         alert('Firebase सिंक बंद करण्यात आले आहे. डेटा आता फक्त या डिव्हाइसवर सुरक्षित राहील.');
       },
 
-      async pushData(isSilent = false) {
+      async forcePushData(isSilent = false) {
+        return this.pushData(isSilent, true);
+      },
+
+      async pushData(isSilent = false, isForce = false) {
         if (!this.config.firebaseUrl) {
           if (!isSilent) alert('कृपया प्रथम Firebase Realtime Database URL प्रविष्ट करा.');
           return false;
@@ -4249,18 +4574,25 @@
             });
           }
 
-          // GUARD 1: Prevent empty device from wiping existing remote data
-          if (localTxCount === 0 && remoteTxCount > 0) {
-            this.config.status = 'idle';
-            this.updateUIStatus();
-            const warnMsg = `⛔ डेटा सुरक्षा इशारा (डेटा नष्ट होण्यापासून रोखला!):\n\nया डिव्हाइसवर 0 व्यवहार नोंदी आहेत, तर Firebase वर आधीच ${remoteTxCount} नोंदी सुरक्षित साठवलेल्या आहेत!\n\nकृपया प्रथम "📥 क्लाऊडवरून आणा" (Download from Cloud) बटण दाबा जेणेकरून क्लाऊडवरील सर्व डेटा या डिव्हाइसवर येईल.`;
-            if (!isSilent) alert(warnMsg);
-            return false;
+          // GUARD 1: If empty device opens while cloud already has transactions, automatically download!
+          if (localTxCount === 0 && remoteTxCount > 0 && !isForce) {
+            console.log("Empty device detected with existing cloud data. Auto-pulling cloud data...");
+            this.mergeAppData(existingRemote.appData, existingRemote);
+            safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            if (typeof refreshCurrentView === 'function') refreshCurrentView();
+            this.config.status = 'synced';
+            this.config.lastSyncTime = existingRemote.updatedAt || new Date().toISOString();
+            this.config.lastError = '';
+            this.saveConfig();
+            if (!isSilent) {
+              alert(`📥 क्लाऊडवरून ${remoteTxCount} नोंदी या डिव्हाइसवर आपोआप सुरक्षित डाऊनलोड झाल्या आहेत!`);
+            }
+            return true;
           }
 
           // GUARD 2: Merge remote data before overwriting so both devices keep all entries
-          if (existingRemote && existingRemote.appData && remoteTxCount > 0) {
-            this.mergeAppData(existingRemote.appData);
+          if (existingRemote && existingRemote.appData && remoteTxCount > 0 && !isForce) {
+            this.mergeAppData(existingRemote.appData, existingRemote);
             safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
             if (typeof refreshCurrentView === 'function') refreshCurrentView();
 
@@ -4279,6 +4611,7 @@
             appType: "school_cashbook",
             schoolCode: currentUdise,
             schoolName: (appData.schoolInfo && appData.schoolInfo.name) || 'शाळा',
+            schoolInfo: appData.schoolInfo || {},
             updatedAt: new Date().toISOString(),
             updatedBy: (appData.schoolInfo && appData.schoolInfo.headmaster) || 'User',
             appData: appData
@@ -4350,7 +4683,17 @@
           if (res.ok) {
             const json = await res.json();
             if (json && json.appData && typeof json.appData === 'object') {
-              this.mergeAppData(json.appData);
+              if (!isSilent) {
+                // EXPLICIT DOWNLOAD: Replace entire state with cloud state so all additions/edits/deletions match 100%
+                appData = json.appData;
+                if (json.schoolInfo) {
+                  appData.schoolInfo = Object.assign({}, appData.schoolInfo, json.schoolInfo);
+                }
+              } else {
+                // SILENT BACKGROUND SYNC: Merge safely
+                this.mergeAppData(json.appData, json);
+              }
+
               safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
               if (typeof refreshCurrentView === 'function') refreshCurrentView();
 
@@ -4361,7 +4704,7 @@
 
               if (!isSilent) {
                 if (typeof showToast === 'function') showToast('🎉 Firebase वरून डेटा डाऊनलोड झाला!');
-                alert(`🎉 Google Firebase वरून कॅश बुक डेटा यशस्वीरित्या डाऊनलोड झाला!\n\nशाळा UDISE: ${currentUdise}\nसर्व खाती व व्यवहार नोंदी अद्ययावत झाल्या आहेत.`);
+                alert(`🎉 Google Firebase वरून कॅश बुक डेटा यशस्वीरित्या डाऊनलोड झाला!\n\nशाळा UDISE: ${currentUdise}\nसर्व खाती, व्यवहार नोंदी व शाळा माहिती अद्ययावत झाली आहे.`);
               }
               return true;
             } else {
@@ -4392,15 +4735,40 @@
         }
       },
 
-      mergeAppData(remoteAppData) {
+      mergeAppData(remoteAppData, remoteRoot) {
         if (!remoteAppData) return;
 
-        // 1. School Info
-        if (remoteAppData.schoolInfo) {
-          appData.schoolInfo = Object.assign({}, remoteAppData.schoolInfo, appData.schoolInfo);
+        // 1. School Info Auto-Sync & Merge (UDISE, Name, Center, Taluka, District, HM)
+        const remoteSchool = (remoteAppData && remoteAppData.schoolInfo) || (remoteRoot && remoteRoot.schoolInfo) || {};
+        if (remoteSchool && typeof remoteSchool === 'object' && Object.keys(remoteSchool).length > 0) {
+          const lS = appData.schoolInfo || {};
+          
+          const pickBetter = (rVal, lVal, placeholder) => {
+            const r = (rVal && typeof rVal === 'string') ? rVal.trim() : '';
+            const l = (lVal && typeof lVal === 'string') ? lVal.trim() : '';
+            if (r && r !== placeholder) return r;
+            if (l && l !== placeholder) return l;
+            return r || l || '';
+          };
+
+          appData.schoolInfo = {
+            name: pickBetter(remoteSchool.name, lS.name, "जिल्हा परिषद प्राथमिक शाळा") || "शाळा सादील खर्च व कॅश बुक",
+            center: pickBetter(remoteSchool.center, lS.center, "केंद्र"),
+            taluka: pickBetter(remoteSchool.taluka, lS.taluka, "तालुका"),
+            district: pickBetter(remoteSchool.district, lS.district, "जिल्हा"),
+            udise: ((remoteSchool.udise || '').trim()) || ((lS.udise || '').trim()) || this.config.schoolCode || '',
+            headmaster: pickBetter(remoteSchool.headmaster, lS.headmaster, "मुख्याध्यापक")
+          };
+
+          if (appData.schoolInfo.udise) {
+            this.config.schoolCode = appData.schoolInfo.udise;
+            this.saveConfig();
+            const cInput = document.getElementById('fbSchoolCodeInput');
+            if (cInput) cInput.value = appData.schoolInfo.udise;
+          }
         }
 
-        // 2. Accounts
+        // 2. Accounts & Transactions Merge
         const localAccounts = appData.accounts || [];
         const remoteAccounts = remoteAppData.accounts || [];
 
@@ -4430,6 +4798,10 @@
                   const lh = lHeads.find(h => h.id === rh.id || h.name === rh.name);
                   if (!lh) {
                     lHeads.push(rh);
+                  } else {
+                    if (rh.openingBalance !== undefined && rh.openingBalance !== null && rh.openingBalance !== 0) {
+                      lh.openingBalance = rh.openingBalance;
+                    }
                   }
                 });
                 lY.heads = lHeads;
@@ -4449,18 +4821,36 @@
                     const lM = lY.months[mKey];
                     lM.jama = Array.isArray(lM.jama) ? lM.jama : [];
                     const rJama = Array.isArray(rM.jama) ? rM.jama : [];
+                    
+                    // Merging Jama: UPDATE existing entries so edits (badal) are reflected!
                     rJama.forEach(rtx => {
                       if (!rtx) return;
-                      const exists = lM.jama.some(ltx => ltx && (ltx.id === rtx.id || (ltx.date === rtx.date && ltx.amount === rtx.amount && ltx.details === rtx.details)));
-                      if (!exists) lM.jama.push(rtx);
+                      const existingIdx = lM.jama.findIndex(ltx => ltx && ltx.id === rtx.id);
+                      if (existingIdx !== -1) {
+                        lM.jama[existingIdx] = Object.assign({}, lM.jama[existingIdx], rtx);
+                      } else {
+                        const duplicate = lM.jama.some(ltx => ltx && (ltx.date === rtx.date && ltx.amount === rtx.amount && ltx.headId === rtx.headId && ltx.details === rtx.details));
+                        if (!duplicate) {
+                          lM.jama.push(rtx);
+                        }
+                      }
                     });
 
                     lM.kharch = Array.isArray(lM.kharch) ? lM.kharch : [];
                     const rKharch = Array.isArray(rM.kharch) ? rM.kharch : [];
+                    
+                    // Merging Kharch: UPDATE existing entries so edits (badal) are reflected!
                     rKharch.forEach(rtx => {
                       if (!rtx) return;
-                      const exists = lM.kharch.some(ltx => ltx && (ltx.id === rtx.id || (ltx.date === rtx.date && ltx.amount === rtx.amount && ltx.details === rtx.details)));
-                      if (!exists) lM.kharch.push(rtx);
+                      const existingIdx = lM.kharch.findIndex(ltx => ltx && ltx.id === rtx.id);
+                      if (existingIdx !== -1) {
+                        lM.kharch[existingIdx] = Object.assign({}, lM.kharch[existingIdx], rtx);
+                      } else {
+                        const duplicate = lM.kharch.some(ltx => ltx && (ltx.date === rtx.date && ltx.amount === rtx.amount && ltx.headId === rtx.headId && ltx.details === rtx.details));
+                        if (!duplicate) {
+                          lM.kharch.push(rtx);
+                        }
+                      }
                     });
                   }
                 });
@@ -4489,7 +4879,7 @@
                 appData = json.appData;
                 safeStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
                 if (typeof refreshCurrentView === 'function') refreshCurrentView();
-                await this.pushData(true);
+                await this.forcePushData(true);
                 alert(`🎉 क्लाऊड बॅकअप यशस्वीरित्या पूर्ववत करण्यात आला!`);
                 return true;
               }
