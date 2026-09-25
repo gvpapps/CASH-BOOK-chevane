@@ -771,7 +771,16 @@
         color: #0f172a !important;
       }
       .ctrl-group .btn {
-        display: none !important;
+        display: inline-flex !important;
+        padding: 4px 8px !important;
+        font-size: 0.85rem !important;
+        border-radius: 6px !important;
+        margin-left: 4px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(255, 255, 255, 0.25) !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        color: #ffffff !important;
       }
       .cloud-pill {
         padding: 6px 10px !important;
@@ -2150,13 +2159,18 @@
         appData.currentMonth = 4;
       }
 
-      // Sanitize months across all accounts to guarantee no null entries
+      // Ensure 2024-25 and 2025-26 are always initialized across all accounts
       (appData.accounts || []).forEach(a => {
-        if (!a || !a.years) return;
+        if (!a) return;
+        if (!a.years) a.years = {};
+        if (!a.years["2024-25"]) a.years["2024-25"] = { heads: [], months: {} };
+        if (!a.years["2025-26"]) a.years["2025-26"] = { heads: [], months: {} };
         Object.keys(a.years).forEach(y => {
           if (a.years[y]) a.years[y].months = sanitizeMonths(a.years[y].months);
         });
       });
+      // Auto-sync 2024-25 31 March closing to 2025-26 1 April opening
+      syncOpeningFromPreviousYear("2025-26", true);
     }
 
     function saveData() {
@@ -2495,18 +2509,27 @@
       const curAcc = getCurrentAccount();
       const yrSelect = document.getElementById("selectYear");
       yrSelect.innerHTML = "";
-      const yrs = Object.keys(curAcc.years);
-      if (yrs.length === 0) {
-        curAcc.years["2024-25"] = { heads: [], months: {} };
-        yrs.push("2024-25");
-      }
-      yrs.forEach(y => {
+      
+      // Standard financial years list + any custom years in this account
+      const standardYears = ["2023-24", "2024-25", "2025-26", "2026-27"];
+      const allYearSet = new Set([...standardYears, ...Object.keys(curAcc.years || {})]);
+      const sortedYears = Array.from(allYearSet).sort();
+
+      sortedYears.forEach(y => {
         const opt = document.createElement("option");
         opt.value = y;
-        opt.innerText = y;
+        let suffix = "";
+        if (y === "2024-25") suffix = " (2024-25)";
+        else if (y === "2025-26") suffix = " (2025-26)";
+        opt.innerText = y + suffix;
         if (y === appData.currentYear) opt.selected = true;
         yrSelect.appendChild(opt);
       });
+
+      const addOpt = document.createElement("option");
+      addOpt.value = "__NEW_YEAR__";
+      addOpt.innerText = "➕ नवीन वर्ष जोडा...";
+      yrSelect.appendChild(addOpt);
 
       document.querySelectorAll(".activeYearText").forEach(el => {
         el.innerText = appData.currentYear;
@@ -2930,11 +2953,21 @@
     }
 
     function changeYear(yr) {
+      if (yr === "__NEW_YEAR__") {
+        openNewYearModal();
+        const yrSelect = document.getElementById("selectYear");
+        if (yrSelect) yrSelect.value = appData.currentYear;
+        return;
+      }
+      const curAcc = getCurrentAccount();
+      if (!curAcc.years[yr]) {
+        curAcc.years[yr] = { heads: [], months: {} };
+      }
       appData.currentYear = yr;
       syncOpeningFromPreviousYear(yr, true);
       saveData();
       refreshCurrentView();
-      showToast("आर्थिक वर्ष बदलले!");
+      showToast(`आर्थिक वर्ष ${yr} निवडले!`);
     }
 
     function openModal(id) {
